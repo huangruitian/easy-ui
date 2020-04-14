@@ -1,0 +1,14 @@
+// _ 下划线是告诉sass 不要编译这个样式文件，导入就不需要加下划线了；
+// _variables.scss 这样的样式文件不能单独使用，只能导入使用，sass 知识
+// config
+@import "variables";
+// layout
+@import "reboot";
+// css 混合样式
+@import "mixin";
+// button style 作用域的问题，得先引入上面的变量
+@import "../components/Button/style";
+// alert style
+@import "../components/Alert/style";
+// menu style
+@import "../components/Menu/index";

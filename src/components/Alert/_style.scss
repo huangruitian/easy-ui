@@ -1,0 +1,42 @@
+.alert {
+    width:400px;
+    min-height: 100px;
+    border-radius: $border-radius;
+    background-color: $gray-100;
+    @include flex-center-block();
+    // 背景颜色，字体颜色
+    .alert-title-box{
+        display: flex;
+        justify-content: space-between;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 15px;
+        border-bottom: 1px solid $yellow;
+        .alert-link:hover{
+          color: red;
+          cursor: pointer;
+        }
+    }
+    .alert-content-box{
+        padding: 15px;
+        word-break: break-word;
+    }
+}
+
+.alert-success {
+    @include alert-style($gray-900, $green)
+}
+
+.alert-default {
+    @include alert-style($black, $teal)
+}
+
+.alert-danger {
+    @include alert-style($black, $red)
+}
+
+.alert-wraning {
+    @include alert-style($gray-700, $yellow)
+}
+
+
