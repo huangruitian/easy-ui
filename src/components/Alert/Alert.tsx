@@ -1,5 +1,7 @@
 import React, { FC, ReactNode, useState } from "react";
 import classNames from "classnames";
+import Icon from "../Icon/Icon";
+import Transition from "../Transition";
 
 // 1.点击 关闭按钮 整个元素消失
 // 2.支持四种主题颜色
@@ -46,8 +48,12 @@ export const Alert: FC<IAlertProps> = (props) => {
     })
 
     return (
-        <>
-            {status ? <div className={classes}>
+        <Transition
+            in={status}
+            timeout={300}
+            animation="zoom-in-top"
+        >
+            <div className={classes}>
                 <div className="alert-title-box">
                     <span>标题：{message}</span>
                     {closable ? <a
@@ -57,13 +63,13 @@ export const Alert: FC<IAlertProps> = (props) => {
                             if (onClose) {
                                 onClose(e)
                             }
-                        }}>{closeText}</a> : null}
+                        }}><Icon icon="ban" size='lg'>{closeText}</Icon></a> : null}
                 </div>
                 <div className="alert-content-box">
                     {description != undefined ? description : children}
                 </div>
-            </div> : null}
-        </>
+            </div>
+        </Transition>
     )
 }
 
@@ -71,7 +77,7 @@ Alert.defaultProps = {
     /** 默认不显示关闭按钮 */
     closable: false,
     /** 关闭按钮文字 */
-    closeText: "X",
+    closeText: "关闭",
     /** 类型 AlertType */
     type: "default",
     /** 默认渲染 description */

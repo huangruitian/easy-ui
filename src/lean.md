@@ -19,3 +19,20 @@
 - 测试用例后面再写
 
 # Menu 组件
+- 自己写一次
+
+# Tabs
+- 样式完善
+
+# Icon 
+- 上古时代 - 雪碧图（CSS sprite）
+- 近代 - Font Icon，Font Icon 还有很多奇怪的 BUG 
+- 现代和未来 - SVG 完全可控，Font Icon 要下载全部的字体文件
+- https://www.npmjs.com/package/@fortawesome/react-fontawesome
+
+# React Transition Group
+- React 动画库
+- animate.css 这个网站可以查动画，想要的动画
+
+
+

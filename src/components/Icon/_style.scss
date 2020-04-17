@@ -1,0 +1,6 @@
+// 利用循环设置很多变量 $theme-colors 是个对象
+@each $key, $val in $theme-colors {
+    .icon-#{$key} {
+      color: $val;
+    }
+  }

@@ -2,7 +2,7 @@
     width:400px;
     min-height: 100px;
     border-radius: $border-radius;
-    background-color: $gray-100;
+    border: 1px solid #91d5ff;
     @include flex-center-block();
     // 背景颜色，字体颜色
     .alert-title-box{
@@ -11,9 +11,9 @@
         height: 40px;
         line-height: 40px;
         padding: 0 15px;
-        border-bottom: 1px solid $yellow;
+        border-bottom: 1px solid #91d5ff;
         .alert-link:hover{
-          color: red;
+          color: $pink;
           cursor: pointer;
         }
     }
@@ -28,7 +28,7 @@
 }
 
 .alert-default {
-    @include alert-style($black, $teal)
+    @include alert-style($black, $alert)
 }
 
 .alert-danger {
