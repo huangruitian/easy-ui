@@ -7,6 +7,8 @@ import Tabs from "./components/Tabs";
 import Alert from "./components/Alert/Alert";
 import Input from "./components/Input/Input";
 import AotuComplete, { DataSourceType } from "./components/AotuComplete/AotuComplete";
+import Select from "./components/Select/Select";
+import Option from './components/Select/Option'
 // 用 library 加入图标，需要什么种类的就加什么
 library.add(fas)
 
@@ -38,7 +40,7 @@ const App: React.FC = () => {
       .then(res => res.json())
       .then(({ items }) => {
         console.log(items)
-        const formatItems = items.slice(0, 10).map((item:any) => ({ value:item.login, ...item }))
+        const formatItems = items.slice(0, 10).map((item: any) => ({ value: item.login, ...item }))
         return formatItems
       })
   }
@@ -108,7 +110,21 @@ const App: React.FC = () => {
           // renderOption={renderOption}
           />
         </div>
-
+        <p>分割线===========</p>
+        <Select
+          onVisibleChange={(value, Option) => {
+            console.log('onVisibleChange', value, Option)
+          }}
+          onChange={(value, Option) => {
+            console.log('onChange', value, Option)
+          }}
+          mode="multiple"
+          defaultValue={[0, 1, 2]}
+        >
+          <Option value="kw">kw</Option>
+          <Option value="hrt">hrt</Option>
+          <Option value="mg">mg</Option>
+        </Select>
       </div>
     </div>
   );
