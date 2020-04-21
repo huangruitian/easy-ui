@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "./components/Button/Button";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -9,6 +9,10 @@ import Input from "./components/Input/Input";
 import AotuComplete, { DataSourceType } from "./components/AotuComplete/AotuComplete";
 import Select from "./components/Select/Select";
 import Option from './components/Select/Option'
+import axios from 'axios'
+import Test from "./components/Upload/test";
+import Upload from "./components/Upload/Upload";
+
 // 用 library 加入图标，需要什么种类的就加什么
 library.add(fas)
 
@@ -18,7 +22,7 @@ interface IUserProps {
 }
 
 const App: React.FC = () => {
-
+  const url = 'https://jsonplaceholder.typicode.com/posts'
   const [val, setVal] = useState('vaasdasdl')
   const data: IUserProps[] = [
     {
@@ -30,6 +34,19 @@ const App: React.FC = () => {
       number: 20
     },
   ]
+
+  useEffect(() => {
+    axios.get(`https://api.github.com/search/users?q=a`)
+      .then(res => {
+        console.log(res.data.items)
+        return res.data.items
+      }, reject => {
+        // console.log('reject', reject)
+        return reject
+      }).then(res => {
+        console.log('res', res)
+      })
+  }, [])
 
   const fetchSuggestions1 = (key: string) => {
     return data.filter(item => item.value.includes(key))
@@ -126,6 +143,12 @@ const App: React.FC = () => {
           <Option value="mg">mg</Option>
         </Select>
       </div>
+      <Upload
+        action={url}
+        onRemove={(file) => {
+          console.log(file)
+        }}
+      />
     </div>
   );
 }

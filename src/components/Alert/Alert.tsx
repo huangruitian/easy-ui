@@ -63,7 +63,7 @@ export const Alert: FC<IAlertProps> = (props) => {
                             if (onClose) {
                                 onClose(e)
                             }
-                        }}><Icon icon="ban" size='lg'>{closeText}</Icon></a> : null}
+                        }}><Icon icon="times" size='lg'>{closeText}</Icon></a> : null}
                 </div>
                 <div className="alert-content-box">
                     {description != undefined ? description : children}

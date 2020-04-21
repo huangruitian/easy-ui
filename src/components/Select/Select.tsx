@@ -101,7 +101,7 @@ const Select: FC<ISelectProps> = (props) => {
   //   }
   //   setCurActive(index)
   // }
-  const getCurrentValus = (indexArr:number []) => {
+  const getCurrentValus = (indexArr: number[]) => {
     const values: string[] = []
     indexArr.forEach(idx => {
       values.push(dataSoure[idx])
@@ -111,7 +111,7 @@ const Select: FC<ISelectProps> = (props) => {
 
   // 点击按钮，设置当前的值
   const handleClick = (idx: number) => {
-    const indexArr:number [] = selectIndexByDataSoure(idx)
+    const indexArr: number[] = selectIndexByDataSoure(idx)
     if (onChange) {
       onChange(getCurrentValus(indexArr), dataSoure)
     }
@@ -119,19 +119,26 @@ const Select: FC<ISelectProps> = (props) => {
 
   // 鼠标聚焦，显示菜单
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    setShow(true)
-    if (onVisibleChange) {
-      onVisibleChange(!show, dataSoure)
-    }
-    inputRef.current?.blur()
+    setShow((pre) => {
+      console.log('handleFocus', pre)
+      if (onVisibleChange) {
+        onVisibleChange(true, dataSoure)
+      }
+      inputRef.current?.blur()
+      return true
+    })
   }
 
   // 隐藏菜单
   const handleBlur = (e: MouseEvent) => {
-    setShow(false)
-    if (onVisibleChange) {
-      onVisibleChange(!show, dataSoure)
-    }
+    setShow((pre) => {
+      // 想类组件一样setState
+      console.log('handleBlur', pre)
+      if (onVisibleChange) {
+        onVisibleChange(false, dataSoure)
+      }
+      return false
+    })
   }
 
   const selectIndexByDataSoure = (index: number) => {
