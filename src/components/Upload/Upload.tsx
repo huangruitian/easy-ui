@@ -92,7 +92,8 @@ const Upload: React.FC<IUploadProps> = (props) => {
         'Content-Type': 'multipart/form-data',
       },
       onUploadProgress: (e) => {
-        let percentage = (Math.round(e.loaded * 100) / e.total) || 0
+        console.log('onUploadProgress', e)
+        let percentage = Math.round(+(e.loaded * 100 / e.total).toFixed(2)) || 0
         uploadFile(_file, {
           status: "uploading",
           percent: percentage,

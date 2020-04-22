@@ -12,6 +12,7 @@ import Option from './components/Select/Option'
 import axios from 'axios'
 import Test from "./components/Upload/test";
 import Upload from "./components/Upload/Upload";
+import InputNumber from "./components/InputNumber/InputNumber";
 
 // 用 library 加入图标，需要什么种类的就加什么
 library.add(fas)
@@ -148,6 +149,16 @@ const App: React.FC = () => {
         onRemove={(file) => {
           console.log(file)
         }}
+      />
+      <InputNumber 
+        onChange={(value) => {
+          console.log(value)
+        }}
+        defaultValue={10.1}
+        max={20}
+        min={1}
+        step={0.2111111}
+        // precision={4}
       />
     </div>
   );
