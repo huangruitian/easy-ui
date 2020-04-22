@@ -35,7 +35,7 @@ const InputNumber: FC<Partial<InputProps>> = (props) => {
         min,
         size,
         step,
-        precision,
+        precision = 0,
         onChange,
         ...restProps
     } = props
@@ -60,22 +60,23 @@ const InputNumber: FC<Partial<InputProps>> = (props) => {
         } else {
             result = (num1 * baseNum - num2 * baseNum) / baseNum;
         }
-        return precision ? +result.toFixed(precision) : result
+        return result.toFixed(precision)
     }
 
     const compute = (step: number, operator: '+' | '-') => {
-        let curVal: number;
+        let curVal:string;
         if (operator === '+') {
             curVal = formatFloat(+value, step, operator)
-            if (max && max < curVal) {
+            if (max && max < +curVal) {
                 return
             }
         } else {
             curVal = formatFloat(+value, step, operator)
-            if (min && min > curVal) {
+            if (min && min > +curVal) {
                 return
             }
         }
+        console.log('compute', curVal)
         setValue(_ => {
             if (onChange) {
                 onChange(curVal)

@@ -149,7 +149,15 @@ const App: React.FC = () => {
         onRemove={(file) => {
           console.log(file)
         }}
-      />
+        headers={{Hrt:'kww'}}
+        name='fileName'
+        data={{key:'val'}}
+        accept={'.docx'}
+        withCredentials
+        multiple
+        drag>
+          上传文件
+        </Upload>
       <InputNumber 
         onChange={(value) => {
           console.log(value)
@@ -157,8 +165,8 @@ const App: React.FC = () => {
         defaultValue={10.1}
         max={20}
         min={1}
-        step={0.2111111}
-        // precision={4}
+        step={0.2}
+        precision={4}
       />
     </div>
   );

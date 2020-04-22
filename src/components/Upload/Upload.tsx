@@ -2,6 +2,7 @@ import React, { useRef, useState, useCallback } from 'react'
 import axios from 'axios'
 import Button from '../Button/Button'
 import FileList from './FileList'
+import Dragger from './Dragger'
 
 export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'error'
 
@@ -22,17 +23,31 @@ export interface IUploadProps {
   /** 可以做上传前的一些验证 */
   beforeUpload?: (file: File) => boolean | Promise<File>;
   /** 上传进度 */
-  onProgress?: (percentage: number, file: File) => void;
+  onProgress?: (percentage: number, file: UploadFile) => void;
   /** 上传之后的回调 */
-  onChange?: (file: File) => void;
+  onChange?: (file: UploadFile) => void;
   /** 上传成功的回调 */
-  onSuccess?: (data: any, file: File) => void;
+  onSuccess?: (data: any, file: UploadFile) => void;
   /** 上传失败的回调 */
-  onError?: (err: any, file: File) => void;
+  onError?: (err: any, file: UploadFile) => void;
   /** 默认的文件 */
   defaultFileList?: UploadFile[],
   /** 删除一个文件的回调 */
   onRemove?: (file: UploadFile) => void
+  /** 上传文件自定义的 headers */
+  headers?: { [key: string]: any };
+  /** 文件名 */
+  name?: string;
+  /** 上传携带的数据 */
+  data?: { [key: string]: any };
+  /** 是否携带cookie */
+  withCredentials?: boolean;
+  /** 允许上传的文件类型 */
+  accept?: string;
+  /** 是否支持多文件上次 */
+  multiple?: boolean;
+  /** 是否支持拖拽上传 */
+  drag?: boolean;
 }
 
 const Upload: React.FC<IUploadProps> = (props) => {
@@ -45,6 +60,14 @@ const Upload: React.FC<IUploadProps> = (props) => {
     beforeUpload,
     defaultFileList,
     onRemove,
+    headers,
+    name,
+    data,
+    withCredentials,
+    accept,
+    multiple,
+    children,
+    drag,
   } = props
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -61,7 +84,7 @@ const Upload: React.FC<IUploadProps> = (props) => {
     }
   }
 
-  const uploadFile = (_file: UploadFile, filePropsObj: Partial<UploadFile>) => {
+  const updateFile = (_file: UploadFile, filePropsObj: Partial<UploadFile>) => {
     setFileList(preFileList => {
       return preFileList.map((file) => {
         if (file.uid === _file.uid) {
@@ -84,45 +107,55 @@ const Upload: React.FC<IUploadProps> = (props) => {
       percent: 0,
       raw: file
     }
-    setFileList([...fileList, _file])
+    // setFileList([...fileList, _file])
+    setFileList(preList => ([...preList, _file]))
     const formData = new FormData()
-    formData.append(file.name, file)
+
+    if (data) {
+      Object.keys(data).forEach(key => {
+        formData.append(key, data[key])
+      })
+    }
+
+    formData.append(name || 'file', file)
     axios.post(action, formData, {
       headers: {
+        ...headers,
         'Content-Type': 'multipart/form-data',
       },
+      withCredentials,
       onUploadProgress: (e) => {
         console.log('onUploadProgress', e)
         let percentage = Math.round(+(e.loaded * 100 / e.total).toFixed(2)) || 0
-        uploadFile(_file, {
+        updateFile(_file, {
           status: "uploading",
           percent: percentage,
         })
         if (percentage < 100) {
           if (onProgress) {
-            onProgress(percentage, file)
+            onProgress(percentage, _file)
           }
         }
       }
     }).then(resp => {
       if (onSuccess) {
-        onSuccess(resp, file)
+        onSuccess(resp, _file)
       }
       if (onChange) {
-        onChange(file)
+        onChange(_file)
       }
-      uploadFile(_file, {
+      updateFile(_file, {
         response: resp.data,
         status: 'success'
       })
     }).catch(err => {
       if (onError) {
-        onError(err, file)
+        onError(err, _file)
       }
       if (onChange) {
-        onChange(file)
+        onChange(_file)
       }
-      uploadFile(_file, {
+      updateFile(_file, {
         error: err,
         status: "error"
       })
@@ -164,18 +197,22 @@ const Upload: React.FC<IUploadProps> = (props) => {
 
   return (
     <div className="viking-upload-component">
-      <div className="viking-upload-input">
-        <Button
-          btnType="primary"
-          onClick={handleClick}
-        >
-          upload file
-      </Button>
+      <div className="viking-upload-input"
+        style={{ display: 'inline-block' }}
+        onClick={handleClick}>
+        {drag ?
+          <Dragger onFile={(files) => { uploadedFiles(files) }}>
+            {children}
+          </Dragger> :
+          children
+        }
         <input
+          accept={accept}
+          multiple={multiple}
           className="viking-file-input"
+          style={{ display: 'none' }}
           ref={inputRef}
           type="file"
-          style={{ display: 'none' }}
           onChange={handleFileChange} />
       </div>
       <FileList
