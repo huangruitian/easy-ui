@@ -10,9 +10,10 @@ import AotuComplete, { DataSourceType } from "./components/AotuComplete/AotuComp
 import Select from "./components/Select/Select";
 import Option from './components/Select/Option'
 import axios from 'axios'
-import Test from "./components/Upload/test";
+import Form from "./components/Form/test";
 import Upload from "./components/Upload/Upload";
 import InputNumber from "./components/InputNumber/InputNumber";
+
 
 // 用 library 加入图标，需要什么种类的就加什么
 library.add(fas)
@@ -149,16 +150,16 @@ const App: React.FC = () => {
         onRemove={(file) => {
           console.log(file)
         }}
-        headers={{Hrt:'kww'}}
+        headers={{ Hrt: 'kww' }}
         name='fileName'
-        data={{key:'val'}}
+        data={{ key: 'val' }}
         accept={'.docx'}
         withCredentials
         multiple
         drag>
-          上传文件
+        上传文件
         </Upload>
-      <InputNumber 
+      <InputNumber
         onChange={(value) => {
           console.log(value)
         }}
@@ -168,6 +169,11 @@ const App: React.FC = () => {
         step={0.2}
         precision={4}
       />
+      <div style={{ margin: '10px' }}>
+         <Form>
+
+         </Form>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { useForm} from 'react-hook-form'
 
 // 1.默认值
 // 2.submit 表单提交
@@ -6,7 +7,7 @@ import React, { FC } from 'react'
 // 4.form.xxx 提供一系列的方法
 // 5.const [form] = Form.useFrom() 静态方法创建form实例
 interface formMethods {
-    
+    getValues: () => void
 }
 
 export interface FormProps {
@@ -19,6 +20,7 @@ const Form: FC<FormProps> = (props) => {
         <div>
             Form
               FormItem
+                input
         </div>
     )
 }

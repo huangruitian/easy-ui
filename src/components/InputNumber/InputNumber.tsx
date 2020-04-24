@@ -1,11 +1,10 @@
 import React, { FC, InputHTMLAttributes, ChangeEvent, useState, useRef } from 'react'
 import classNames from 'classnames'
-import { IconProp } from '@fortawesome/fontawesome-svg-core'
-import Icon from '../Icon/Icon'
 import Button from '../Button/Button'
 
 type InputSize = 'large' | 'middle' | 'small'
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLElement>, 'size' | 'onChange'> {
+export interface InputProps extends
+    Omit<InputHTMLAttributes<HTMLElement>, 'size' | 'onChange'> {
     /** 默认值 */
     defaultValue?: number;
     /** 是否被禁用，默认是 false */
@@ -64,7 +63,7 @@ const InputNumber: FC<Partial<InputProps>> = (props) => {
     }
 
     const compute = (step: number, operator: '+' | '-') => {
-        let curVal:string;
+        let curVal: string;
         if (operator === '+') {
             curVal = formatFloat(+value, step, operator)
             if (max && max < +curVal) {
