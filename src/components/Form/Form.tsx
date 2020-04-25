@@ -1,30 +1,49 @@
-import React, { FC } from 'react'
-import { useForm} from 'react-hook-form'
-
-// 1.默认值
-// 2.submit 表单提交
-// 3.包含了Item, name, label
-// 4.form.xxx 提供一系列的方法
-// 5.const [form] = Form.useFrom() 静态方法创建form实例
-interface formMethods {
-    getValues: () => void
-}
+import React from "react";
+import { useForm } from "react-hook-form";
+import Input from "../Input/Input";
+import FormItem, { ItemProps } from "./FormItem";
 
 export interface FormProps {
-    form: formMethods
+  onSubmit: (data: any) => void;
 }
+type FC = React.FC<FormProps> & { useForm:any }
 
-const Form: FC<FormProps> = (props) => {
-    const { children } = props
-    return (
-        <div>
-            Form
-              FormItem
-                input
-        </div>
-    )
-}
+const Form: FC = (props) => {
+  const { children } = props;
+  const { register, handleSubmit, errors, ...restProps } = useForm();
+  const submit = (data: any) => {
+    console.log("data：", data);
+  };
+  console.log("errors：", errors);
+  
+  const createFormItem = (element:any, props?:object) => {
+    return React.cloneElement(element, {
+        ...props
+      });
+  }
 
-Form.displayName = 'Form'
+  const renderChildren = () => {
+    return React.Children.map(children, (child) => {
+      const childElement = child as React.FunctionComponentElement<ItemProps>;
+      const { displayName } = childElement.type;
+      if (displayName === "FormItem") {
+        return createFormItem(childElement, {
+            ref:register({ required: true })
+        });
+      } else if (displayName === "Button") {
+        return createFormItem(childElement);
+      } else {
+        console.error(
+          "Warning: Form has a child which is not a FormItem or Button component"
+        );
+      }
+    });
+  };
+  console.log('renderChildren()', renderChildren())
+  return <form onSubmit={handleSubmit(submit)}>{renderChildren()}</form>;
+};
 
-export default Form
+Form.displayName = "Form";
+Form.useForm = useForm
+
+export default Form;

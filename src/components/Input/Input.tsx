@@ -1,4 +1,4 @@
-import React, { FC, InputHTMLAttributes, ReactNode, ChangeEvent } from 'react'
+import React, { FC, InputHTMLAttributes, ReactNode, ChangeEvent, forwardRef } from 'react'
 import classNames from 'classnames'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import Icon from '../Icon/Icon'
@@ -19,9 +19,11 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLElement>, 'size
     style?: React.CSSProperties;
     /** 收入后的回调 */
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void
+    /** ref 做表单元素时候需要 */
+    ref?: any
 }
 
-const Input: FC<Partial<InputProps>> = (props) => {
+const Input: FC<InputProps> = forwardRef((props, ref:any) => {
     const {
         size,
         disabled,
@@ -51,7 +53,6 @@ const Input: FC<Partial<InputProps>> = (props) => {
         delete restProps.defaultValue
         restProps.value = fixControlledValue(props.value)
     }
-
     return (
         <div className={cnames}>
             {prefix && <div className="viking-input-group-prepend">{prefix}</div>}
@@ -60,12 +61,13 @@ const Input: FC<Partial<InputProps>> = (props) => {
                 className="viking-input-inner"
                 disabled={disabled}
                 style={style}
+                ref={ref}
                 {...restProps}
             />
             {suffix && <div className="viking-input-group-append">{suffix}</div>}
         </div>
     )
-}
+})
 
 Input.displayName = 'Input'
 

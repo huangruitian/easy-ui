@@ -10,9 +10,10 @@ import AotuComplete, { DataSourceType } from "./components/AotuComplete/AotuComp
 import Select from "./components/Select/Select";
 import Option from './components/Select/Option'
 import axios from 'axios'
-import Form from "./components/Form/test";
+import Form from "./components/Form";
 import Upload from "./components/Upload/Upload";
 import InputNumber from "./components/InputNumber/InputNumber";
+import { useForm } from "react-hook-form";
 
 
 // 用 library 加入图标，需要什么种类的就加什么
@@ -170,8 +171,30 @@ const App: React.FC = () => {
         precision={4}
       />
       <div style={{ margin: '10px' }}>
-         <Form>
+         <Form 
+            onSubmit={(data:any) => console.log(data)}
+            form={form}
+         >
+             <Form.Item 
+               name="name" 
+               rules={{
+               required: true,
+               pattern:'aaa',
+               validate:() => '1'
+             }}>
+                <Input type="text"/>
+             </Form.Item>
+             <Form.Item 
+               name="password" 
+               rules={{
+               required: true,
+               pattern:'aaa',
+               validate:() => '1'
+             }}>
+                <Input type="text"/>
+             </Form.Item>
 
+             <Button type="submit">提交</Button>
          </Form>
       </div>
     </div>

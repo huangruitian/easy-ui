@@ -1,23 +1,27 @@
-import React, { FC } from 'react'
-
-
+import React, { FC, forwardRef } from "react";
+import Input from "../Input/Input";
 
 export interface ItemProps {
-   label: React.ReactNode
-   name:string
+  name: string;
+  label?: React.ReactNode;
+  ref?: any;
+  errorMessage?: React.ReactNode;
 }
 
-const FormItem: FC<ItemProps> = (props) => {
-    const { children } = props
-    
-    return (
-        <div>
-           FormItem
-        </div>
-    )
-}
+const FormItem: FC<ItemProps> = forwardRef((props, ref: any) => {
+  const { name, label, errorMessage } = props;
 
-FormItem.displayName = 'Form'
+  return (
+    <div>
+      <div style={{ display: "flex" }}>
+        {label && <div style={{ whiteSpace: "nowrap" }}>{label}：</div>}
+        <Input style={{ display: "inline-block" }} name={name} ref={ref} />
+      </div>
+      {errorMessage && <div style={{color:'red'}}>{errorMessage}</div>}
+    </div>
+  );
+});
 
+FormItem.displayName = "FormItem";
 
-export default FormItem
+export default FormItem;

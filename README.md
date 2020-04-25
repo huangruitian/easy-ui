@@ -1,3 +1,7 @@
+# 报nde-sass错的坑
+set SASS_BINARY_SITE=https://npm.taobao.org/mirrors/node-sass/
+npm install node-sass
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

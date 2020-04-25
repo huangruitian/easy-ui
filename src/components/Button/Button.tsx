@@ -82,4 +82,6 @@ Button.defaultProps = {
   btnType: "default"
 }
 
+Button.displayName = "Button"
+
 export default Button;
