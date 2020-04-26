@@ -25,7 +25,7 @@ interface IUserProps {
 
 const App: React.FC = () => {
   const form = Form.useForm()
-  
+
   const url = 'https://jsonplaceholder.typicode.com/posts'
   const [val, setVal] = useState('vaasdasdl')
   const data: IUserProps[] = [
@@ -172,27 +172,30 @@ const App: React.FC = () => {
         precision={4}
       />
       <div style={{ margin: '10px' }}>
+
         <Form
           form={form}
-          onSubmit={(err:any, data: any) => console.log('err:any, data: any', err, data)}
+          onSubmit={
+            (err: any, data: any) => console.log('err:any, data: any', err, data)
+          }
         >
           <Form.Item
             name="name"
             rules={
               {
-                required:'name1 is required',
-                pattern:/[1-9]/
+                required: 'name1 is required',
+                pattern: /[1-9]/
               }
             }
-            >
-              <Input type="text" />
+          >
+            <Input type="text" />
           </Form.Item>
           <Form.Item
             name="password"
             rules={{
-              required:'password1 is required'
+              required: 'password is required'
             }}>
-              <Input type="text" />
+            <Input type="text" />
           </Form.Item>
           <Button type="submit">提交</Button>
         </Form>

@@ -35,4 +35,8 @@
 - animate.css 这个网站可以查动画，想要的动画
 
 
+# 报nde-sass错的坑
+set SASS_BINARY_SITE=https://npm.taobao.org/mirrors/node-sass/
+npm install node-sass
 
+# npm publish 发布
