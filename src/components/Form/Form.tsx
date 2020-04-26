@@ -1,34 +1,35 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import Input from "../Input/Input";
-import FormItem, { ItemProps } from "./FormItem";
+import React, { FC } from "react";
+import { ValidationOptions, FormContextValues } from "react-hook-form";
+import { ItemProps } from "./FormItem";
 
 export interface FormProps {
-  onSubmit: (data: any) => void;
+  form:FormContextValues<any>;
+  onSubmit?: (erros: object, data: object) => void;
 }
-type FC = React.FC<FormProps> & { useForm:any }
 
-const Form: FC = (props) => {
-  const { children } = props;
-  const { register, handleSubmit, errors, ...restProps } = useForm();
-  const submit = (data: any) => {
-    console.log("data：", data);
-  };
+const Form: FC<FormProps> = (props) => {
+  const { children, onSubmit, form } = props;
+  const { register, handleSubmit, errors, ...restProps } = form;
+   
   console.log("errors：", errors);
-  
-  const createFormItem = (element:any, props?:object) => {
+
+  const createFormItem = (element: any, props?: object) => {
     return React.cloneElement(element, {
-        ...props
-      });
+      ...props
+    });
   }
 
   const renderChildren = () => {
     return React.Children.map(children, (child) => {
       const childElement = child as React.FunctionComponentElement<ItemProps>;
       const { displayName } = childElement.type;
+      const rules = (childElement.props.rules || {}) as ValidationOptions
+      const name = childElement.props.name
+      const errorObj = errors[name] || {}
       if (displayName === "FormItem") {
         return createFormItem(childElement, {
-            ref:register({ required: true })
+          ref: register(rules),
+          errorObj,
         });
       } else if (displayName === "Button") {
         return createFormItem(childElement);
@@ -39,11 +40,16 @@ const Form: FC = (props) => {
       }
     });
   };
-  console.log('renderChildren()', renderChildren())
+
+  const submit = (data: object) => {
+    if (onSubmit) {
+      onSubmit(errors, data)
+    }
+  };
+
   return <form onSubmit={handleSubmit(submit)}>{renderChildren()}</form>;
 };
 
 Form.displayName = "Form";
-Form.useForm = useForm
 
 export default Form;

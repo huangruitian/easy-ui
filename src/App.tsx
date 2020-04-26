@@ -13,7 +13,6 @@ import axios from 'axios'
 import Form from "./components/Form";
 import Upload from "./components/Upload/Upload";
 import InputNumber from "./components/InputNumber/InputNumber";
-import { useForm } from "react-hook-form";
 
 
 // 用 library 加入图标，需要什么种类的就加什么
@@ -25,6 +24,8 @@ interface IUserProps {
 }
 
 const App: React.FC = () => {
+  const form = Form.useForm()
+  
   const url = 'https://jsonplaceholder.typicode.com/posts'
   const [val, setVal] = useState('vaasdasdl')
   const data: IUserProps[] = [
@@ -171,31 +172,30 @@ const App: React.FC = () => {
         precision={4}
       />
       <div style={{ margin: '10px' }}>
-         <Form 
-            onSubmit={(data:any) => console.log(data)}
-            form={form}
-         >
-             <Form.Item 
-               name="name" 
-               rules={{
-               required: true,
-               pattern:'aaa',
-               validate:() => '1'
-             }}>
-                <Input type="text"/>
-             </Form.Item>
-             <Form.Item 
-               name="password" 
-               rules={{
-               required: true,
-               pattern:'aaa',
-               validate:() => '1'
-             }}>
-                <Input type="text"/>
-             </Form.Item>
-
-             <Button type="submit">提交</Button>
-         </Form>
+        <Form
+          form={form}
+          onSubmit={(err:any, data: any) => console.log('err:any, data: any', err, data)}
+        >
+          <Form.Item
+            name="name"
+            rules={
+              {
+                required:'name1 is required',
+                pattern:/[1-9]/
+              }
+            }
+            >
+              <Input type="text" />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={{
+              required:'password1 is required'
+            }}>
+              <Input type="text" />
+          </Form.Item>
+          <Button type="submit">提交</Button>
+        </Form>
       </div>
     </div>
   );
