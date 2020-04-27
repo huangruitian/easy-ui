@@ -39,7 +39,7 @@ const InputNumber: FC<Partial<InputProps>> = (props) => {
         ...restProps
     } = props
     const tempValRef = useRef<number | string>(defaultValue || 0)
-    const [value, setValue] = useState<number | string>(defaultValue || 0)
+    const [value, setValue] = useState<number | string>(defaultValue || '')
     const cnames = classNames('input-wrapper', {
         [`input-size-${size}`]: size,
         'is-disabled': disabled,
