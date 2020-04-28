@@ -38,7 +38,7 @@ const Option: FC<IOptionProps> = (props) => {
   })
 
   return (
-    <li onClick={hanleClick} className={classes} style={{border:'1px solid blue'}}>
+    <li onClick={hanleClick} className={classes} style={{border:'1px solid #ccc', flex:1}}>
       {children}
     </li>
   )
