@@ -57,7 +57,7 @@ const AotuComplete: FC<IAotuCompleteProps> = (props) => {
     } else {
       setSuggestions([])
     }
-  }, [debounceValue])
+  }, [debounceValue, fetchSuggestions])
 
   const cnames = classNames('.viking-auto-complete', {
 

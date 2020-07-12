@@ -1,42 +1,34 @@
-.alert {
-    width:400px;
-    min-height: 100px;
-    border-radius: $border-radius;
-    border: 1px solid #91d5ff;
-    @include flex-center-block();
-    // 背景颜色，字体颜色
-    .alert-title-box{
-        display: flex;
-        justify-content: space-between;
-        height: 40px;
-        line-height: 40px;
-        padding: 0 15px;
-        border-bottom: 1px solid #91d5ff;
-        .alert-link:hover{
-          color: $pink;
-          cursor: pointer;
-        }
-    }
-    .alert-content-box{
-        padding: 15px;
-        word-break: break-word;
-    }
+$alert-colors: 
+(
+  "default":    $primary,
+  "success":    $success,
+  "warning":    $warning,
+  "danger":     $danger,
+);
+.viking-alert {
+  position: relative;
+  padding: $alert-padding-y $alert-padding-x;
+  margin-bottom: $alert-margin-bottom;
+  border: $alert-border-width solid transparent;
+  border-radius: $alert-border-radius;
+  .viking-alert-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: $alert-padding-y $alert-padding-x;
+    color: inherit;
+    cursor: pointer;
+  }
+  .bold-title {
+    font-weight: $font-weight-bold;
+  }
+  .viking-alert-desc {
+    font-size: $alert-description-font-size;
+    margin: $alert-description-top-margin 0 0;
+  }
 }
-
-.alert-success {
-    @include alert-style($gray-900, $green)
+@each $color, $value in $alert-colors {
+  .viking-alert-#{$color} {
+    @include alert-style($value, darken($value, 5%), $white);
+  }
 }
-
-.alert-default {
-    @include alert-style($black, $alert)
-}
-
-.alert-danger {
-    @include alert-style($black, $red)
-}
-
-.alert-wraning {
-    @include alert-style($gray-700, $yellow)
-}
-
-

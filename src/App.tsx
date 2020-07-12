@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Button from "./components/Button/Button";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import Button from "./components/Button/Button";
 import Menu from "./components/Menu";
 import Tabs from "./components/Tabs";
 import Alert from "./components/Alert/Alert";
@@ -27,7 +27,6 @@ interface IUserProps {
 
 const App: React.FC = () => {
   const form = Form.useForm();
-
   const url = "https://jsonplaceholder.typicode.com/posts";
   const [val, setVal] = useState("vaasdasdl");
   const data: IUserProps[] = [
@@ -116,9 +115,9 @@ const App: React.FC = () => {
     <div>
       <Button> 显示/隐藏 </Button>
       <Menu
-        mode="vertical"
+        // mode="vertical"
         defaultIndex={"0"}
-        onSelect={(index) => {
+        onSelect={(index:string) => {
           console.log(index);
         }}
       >
@@ -129,21 +128,24 @@ const App: React.FC = () => {
         </Menu.SubMenu>
         <Menu.Item>第三项</Menu.Item>
       </Menu>
+      
       <Tabs
         // type="line"
-        defaultIndex={"0"}
+        // defaultIndex={"0"}
         onSelect={(index) => {
           console.log(index);
         }}
       >
-        <Tabs.TabItem tab="第一项"> 第一项的内容 </Tabs.TabItem>
-        <Tabs.TabItem tab="第二项" disabled>
+        <Tabs.Item label="第一项"> 第一项的内容 </Tabs.Item>
+        <Tabs.Item label="第二项" >
           {" "}
           第二项的内容{" "}
-        </Tabs.TabItem>
-        <Tabs.TabItem tab="第三项"> 第三项的内容 </Tabs.TabItem>
+        </Tabs.Item>
+        <Tabs.Item label="第三项"> 第三项的内容 </Tabs.Item>
       </Tabs>
-      <Alert message="111" type="default" closable />
+
+      <Alert title='111' type="default" closable />
+
       <div>
         <Input
           defaultValue="222"

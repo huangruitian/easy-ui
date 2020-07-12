@@ -9,17 +9,17 @@
 
 // animation
 @import "animation";
-
 // button
+
 @import "../components/Button/style";
+
+//alert
+@import "../components/Alert/style";
 
 // menu
 @import "../components/Menu/style";
 
-// Alert
-@import "../components/Alert/style";
-
-// tabs
+//navs
 @import "../components/Tabs/style";
 
 // icon
@@ -31,7 +31,7 @@
 //auto-complete
 @import "../components/AotuComplete/style";
 
-//Select
+//select
 @import "../components/Select/style";
 
 //upload

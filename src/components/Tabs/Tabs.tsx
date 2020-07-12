@@ -1,89 +1,92 @@
-import React, { FC, ReactNode, useState, CSSProperties, createContext } from "react";
-import classNames from "classnames";
-import { ITabItemProps } from "./TabItem";
-
-type TabsType = 'line' | 'card'
-type onSelectCallBack = (selectedIndex: string) => void;
-export interface ITabsProps {
-    /** 卡片类型，默认是line */
-    type?: TabsType;
-    /** <Tabs> 自定义内容 </Tabs> */
-    children?: ReactNode;
-    /** <Tabs> 自定义类名 */
-    className?: string;
-    /** 默认选择的 tab 项目，不传默认第一项 */
-    defaultIndex?: string;
-    /** 选择卡片后的回调 */
-    onSelect?: onSelectCallBack;
-    /** 卡片的样式 */
-    style?: CSSProperties,
+import React, { FC, useState, FunctionComponentElement } from 'react'
+import classNames from 'classnames'
+import { TabItemProps } from './TabItem'
+export interface TabsProps {
+  /**当前激活 tab 面板的 index，默认为0 */
+  defaultIndex?: number;
+  /**可以扩展的 className */
+  className?: string;
+  /**点击 Tab 触发的回调函数 */
+  onSelect?: (selectedIndex: number) => void;
+  /**Tabs的样式，两种可选，默认为 line */
+  type?: 'line' | 'card';
 }
 
-export interface ITabsContext {
-    index: string,
-    /**点击菜单项触发的回掉函数 */
-    onSelect?: onSelectCallBack;
-    /** 卡片类型，默认是line */ 
-    type?: TabsType;
-}
-export const TabsContext = createContext<ITabsContext>({ index: '0' })
+/**
+ * 选项卡切换组件。
+ * 提供平级的区域将大块内容进行收纳和展现，保持界面整洁。
+ * ### 引用方法
+ * 
+ * ~~~js
+ * import { Tabs } from 'vikingship'
+ * ~~~
+ */
+export const Tabs: FC<TabsProps> = (props) => {
+  const {
+    defaultIndex,
+    className,
+    onSelect,
+    children,
+    type
+  } = props
+  const [ activeIndex, setActiveIndex ] = useState(defaultIndex)
 
-export const Tabs: FC<ITabsProps> = (props) => {
-    const {
-        type,
-        children,
-        className,
-        defaultIndex,
-        onSelect,
-        style
-    } = props
-    const [curActive, setCurActive] = useState(defaultIndex)
-    // 点击选择卡片
-    const handleClick = (index: string) => {
-        setCurActive(index)
-        if (onSelect) {
-            onSelect(index)
-        }
+  const handleClick = (e: React.MouseEvent, index: number, disabled: boolean | undefined) => {
+    if (!disabled) {
+      setActiveIndex(index)
+      if (onSelect) {
+        onSelect(index)
+      }
     }
-    // 透传给子组件的 context
-    const context: ITabsContext = {
-        index: curActive ? curActive : "0",
-        onSelect: handleClick,
-        type,
-    }
-    // 混合样式
-    const classes = classNames('tabs', className, {
-        'tabs-line': type === "line",
-        'tabs-card': type !== "card",
+  }
+
+  const navClass = classNames('viking-tabs-nav', {
+    'nav-line': type === 'line',
+    'nav-card': type === 'card',
+  })
+
+  const renderNavLinks = () => {
+    return React.Children.map(children, (child, index) => {
+      const childElement = child as FunctionComponentElement<TabItemProps>
+      const { label, disabled } = childElement.props
+      const classes = classNames('viking-tabs-nav-item', {
+        'is-active': activeIndex === index,
+        'disabled': disabled,
+      })
+      return (
+        <li 
+          className={classes} 
+          key={`nav-item-${index}`}
+          onClick={(e) => {handleClick(e, index, disabled)}}
+        >
+          {label}
+        </li>
+      )
     })
-    // 渲染子节点
-    const renderChildren = () => {
-        return React.Children.map(children, (child, i) => {
-            const childElement = child as React.FunctionComponentElement<ITabItemProps>
-            // 巧妙的利用 displayName 静态属性还创建 reactElement
-            const { displayName } = childElement.type
-            if (displayName === 'TabItem') {
-                return React.cloneElement(childElement, {
-                    index: i.toString()
-                })
-            } else {
-                console.error('the children copmonent not a TabItem!')
-            }
-        })
-    }
+  }
 
-    return (
-        <ul style={style} className={classes}>
-            <TabsContext.Provider value={context}>
-                {renderChildren()}
-            </TabsContext.Provider>
-        </ul>
-    )
+  const renderContent = () => {
+    return React.Children.map(children, (child, index) => {
+      if (index === activeIndex) {
+        return child
+      }
+    })
+  }
+  
+  return (
+    <div className={`viking-tabs ${className}`}>
+      <ul className={navClass}>
+        {renderNavLinks()}
+      </ul>
+      <div className="viking-tabs-content">
+        {renderContent()}
+      </div>
+    </div>
+  )
 }
 
 Tabs.defaultProps = {
-    type: "line",
-    defaultIndex: '0',
+  defaultIndex: 0,
+  type: 'line'
 }
-
 export default Tabs;

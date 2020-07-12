@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, RenderResult, fireEvent, wait } from '@testing-library/react'
-import Menu, {IMenuProps} from './Menu'
+import Menu, {MenuProps} from './Menu'
 import MenuItem from './MenuItem'
 import SubMenu from './SubMenu'
 jest.mock('../Icon/icon', () => {
@@ -15,17 +15,17 @@ jest.mock('react-transition-group', () => {
     }
   }
 })
-const testProps: IMenuProps = {
+const testProps: MenuProps = {
   defaultIndex: '0',
   onSelect: jest.fn(),
   className: 'test'
 }
-const testVerProps: IMenuProps = {
+const testVerProps: MenuProps = {
   defaultIndex: '0',
   mode: 'vertical',
   defaultOpenSubMenus: ['4']
 }
-const generateMenu = (props: IMenuProps) => {
+const generateMenu = (props: MenuProps) => {
   return (
     <Menu {...props}>
       <MenuItem>
@@ -52,10 +52,10 @@ const generateMenu = (props: IMenuProps) => {
 }
 const createStyleFile = () => {
   const cssFile: string = `
-    .viking-submenu {
+    .esay-submenu {
       display: none;
     }
-    .viking-submenu.menu-opened {
+    .esay-submenu.menu-opened {
       display:block;
     }
   `
@@ -66,6 +66,7 @@ const createStyleFile = () => {
 }
 let wrapper: RenderResult, wrapper2: RenderResult, menuElement: HTMLElement, activeElement: HTMLElement, disabledElement: HTMLElement
 describe('test Menu and MenuItem component in default(horizontal) mode', () => {
+  // 跑测试用例时候先运行了，就不用多次创建元素
   beforeEach(() => {
     wrapper = render(generateMenu(testProps))
     wrapper.container.append(createStyleFile())
@@ -75,7 +76,7 @@ describe('test Menu and MenuItem component in default(horizontal) mode', () => {
   })
   it('should render correct Menu and MenuItem based on default props', () => {
     expect(menuElement).toBeInTheDocument()
-    expect(menuElement).toHaveClass('viking-menu test')
+    expect(menuElement).toHaveClass('esay-menu test')
     expect(menuElement.querySelectorAll(':scope > li').length).toEqual(5)
     expect(activeElement).toHaveClass('menu-item is-active')
     expect(disabledElement).toHaveClass('menu-item is-disabled')

@@ -1,4 +1,4 @@
-.viking-menu {
+.esay-menu {
   display: flex;
   flex-wrap: wrap;
   padding-left: 0;
@@ -30,6 +30,7 @@
       align-items: center;
     }
     .arrow-icon {
+      // 让css属性改变持续一段时间，实现动画效果
       transition: transform .25s ease-in-out;
       margin-left: 3px;
     }
@@ -49,7 +50,7 @@
       transform: rotate(180deg) !important;
     }
   }
-  .viking-submenu {
+  .esay-submenu {
     //display: none;
     list-style:none;
     padding-left: 0;
@@ -65,7 +66,7 @@
       }
     }
   }
-  .viking-submenu.menu-opened {
+  .esay-submenu.menu-opened {
     //display: block;
   }
 }
@@ -73,7 +74,7 @@
   >.menu-item {
     border-bottom: $menu-item-active-border-width solid transparent;
   }
-  .viking-submenu {
+  .esay-submenu {
     position: absolute;
     background: $white;
     z-index: 100;

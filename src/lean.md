@@ -34,9 +34,54 @@
 - React 动画库
 - animate.css 这个网站可以查动画，想要的动画
 
-
 # 报nde-sass错的坑
 set SASS_BINARY_SITE=https://npm.taobao.org/mirrors/node-sass/
 npm install node-sass
 
 # npm publish 发布
+
+## 为什么使用TS？
+1. 程序更容易理解
+- 接受什么样的参数？
+- 返回什么样的类型？
+- 动态语言需要手动调试过程...
+2. 效率更高
+- 代码块跳转
+- 自动补全
+- 丰富的接口提示
+3. 更少的错误
+- 编译期间可以发现一些低级错误
+- 比如打错字段，类型错误
+4. 完全兼容javascript
+- 编译后就是js代码。
+
+- 唯一的一个小缺点就是需要一定的学习成本。
+- 短期内增加一些开发成本
+
+## 使用ts
+npm i -g typescript
+
+npx create-react-app my-app --typescript
+
+## 测试金字塔
+- UI
+- service
+- Unit
+
+采用一个测试框架Jest
+
+高版本react脚手架内置了，如果没有要安装开发依赖：@testing-libray/react
+
+再安装一个小工具：jest-dom，增加断言库。针对dom的断言。代码可读性更高。
+cnpm i -D @testing-library/jest-dom
+
+## 设计组件
+1. 明确需要的需求，大小颜色，等等
+2. 以使用者的角度先写伪代码
+3. 不要过渡封装，高可用，可扩展性强
+4. 实现代码的时候，不要一口吃成一个胖子，循序渐进，先实现简单的。
+
+
+
+
+

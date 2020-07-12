@@ -1,13 +1,11 @@
 import { FC } from 'react'
-import Tab, { ITabsProps } from './Tabs'
-import TabItem, { ITabItemProps } from './TabItem'
+import Tabs, { TabsProps } from './Tabs'
+import TabItem, { TabItemProps } from './TabItem'
 
-// 函数组件有个子组件 TabItem
-export type TabsComponent = FC<ITabsProps> & {
-    TabItem: FC<ITabItemProps>,
+export type ITabsComponent = FC<TabsProps> & {
+  Item: FC<TabItemProps>
 }
-const Tabs = Tab as TabsComponent
+const TransTabs = Tabs as ITabsComponent
+TransTabs.Item = TabItem
 
-Tabs.TabItem = TabItem
-
-export default Tabs
+export default TransTabs
