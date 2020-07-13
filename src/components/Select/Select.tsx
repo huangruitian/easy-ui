@@ -1,220 +1,184 @@
-import React, { FC, useState, useRef, useEffect } from "react";
-import classNames from "classnames";
-import Icon from "../Icon/Icon";
-import { IOptionProps } from "./Option";
-import useClickOutSide from "../../hooks/useClickOutSide";
+import React, { FC, useState, createContext, useRef, FunctionComponentElement, useEffect} from 'react'
+import classNames from 'classnames'
+import Input from '../Input'
+import Icon from '../Icon'
+import useClickOutside from '../../hooks/useClickOutSide'
+import Transition from '../Transition/index'
+import { SelectOptionProps } from './Option'
 
-// 1.支持单选多选两种
-// 2.ipunt框不能手动输入，点击选项之后自动填入
-// 3.多模式下，点击可以添加一项，再次点击可以取消一项 tag 上的X也可以删除
-// 4.注意暴露足够多的回调函数，比如onVisibleChange 在下拉菜单，显示、隐藏的时候被调用，
-// 还有onChange，在值发生变化的时候被触发，并且参数应该有当前被选的是哪几项
-// 5.合理的设计组件结构
-
-type SelectMode = "multiple" | "tags";
-export interface ISelectProps {
-  // 支持单选多选两种
-  mode?: SelectMode;
-  // 大小
-  size?: "large" | "small" | "default";
-  // 值发生变化时候调用
-  onChange?: (values: string[], options: string[]) => void;
-  // 显示隐藏下拉菜单时候被调用
-  onVisibleChange?: (visible: boolean, option: string[]) => void;
-  // 是否被禁用
+export interface SelectProps {
+  /**指定默认选中的条目	 可以是是字符串或者字符串数组*/
+  defaultValue?: string | string[];
+  /** 选择框默认文字*/
+  placeholder?: string;
+  /** 是否禁用*/
   disabled?: boolean;
-  // 默认值，单选的时候只有一个
-  defaultValue?: number[];
+  /** 是否支持多选*/
+  multiple?: boolean;
+  /** select input 的 name 属性	 */
+  name?: string;
+  /**选中值发生变化时触发 */
+  onChange?: (selectedValue: string, selectedValues: string[]) => void;
+  /**下拉框出现/隐藏时触发 */
+  onVisibleChange?: (visible: boolean) => void;
 }
 
-interface ISelectContext {
-  index: number[];
-  onSelect?: (selectedIndex: number) => void;
-  mode?: SelectMode;
-  defaultValue?: number[];
+export interface ISelectContext {
+  onSelect?: (value: string, isSelected?: boolean) => void;
+  selectedValues: string[];
+  multiple?: boolean;
 }
 
-export const SelectContext = React.createContext<ISelectContext>({ index: [] });
-
-{
-  /* 
-  <Select>
-    <Select.Option value="lucy">lucy</Select.Option>
-  </Select> 
-*/
-}
-
-const Select: FC<ISelectProps> = (props) => {
+export const SelectContext = createContext<ISelectContext>({ selectedValues: []})
+/**
+ * 下拉选择器。
+ * 弹出一个下拉菜单给用户选择操作，用于代替原生的选择器，或者需要一个更优雅的多选器时。
+ * ### 引用方法
+ * 
+ * ~~~js
+ * import { Select } from 'vikingship'
+ * // 然后可以使用 <Select> 和 <Select.Option>
+ * ~~~
+ */
+export const Select:FC<SelectProps> = (props) => {
   const {
-    mode,
-    size,
+    defaultValue,
+    placeholder,
+    children,
+    multiple,
+    name,
+    disabled,
     onChange,
     onVisibleChange,
-    disabled,
-    defaultValue = [],
-    children,
-  } = props;
-  if (mode === "tags") {
-    defaultValue.length = 1;
-  }
-  // 拿到当前子节点的值
-  const [dataSoure, setDataSoure] = useState<string[]>([]);
-  // 显示或者隐藏下拉菜单
-  const [show, setShow] = useState(false);
-  // 当前选择的索引，你选了啥, tag 只能选一个，不是tag 可以选多个
-  const [curActive, setCurActive] = useState<number[]>(defaultValue);
-
-  const inputRef = useRef<HTMLInputElement>(null);
-  const compRef = useRef<HTMLDivElement>(null);
-  useClickOutSide(compRef, (e: MouseEvent) => handleBlur(e));
-
-  // 拿到子元素的所有数据
-  useEffect(() => {
-    const vaules: string[] = [];
-    React.Children.map(children, (child) => {
-      const childElement = child as React.FunctionComponentElement<
-        IOptionProps
-      >;
-      // 拿到所有的 value
-      vaules.push(childElement.props.value);
-    });
-    setDataSoure(vaules);
-  }, []);
-
-  const renderChildren = () => {
-    return React.Children.map(children, (child, index) => {
-      const childElement = child as React.FunctionComponentElement<
-        IOptionProps
-      >;
-      const { displayName } = childElement.type;
-      if (displayName === "Option") {
-        return React.cloneElement(childElement, {
-          index: index,
-        });
-      } else {
-        console.error(
-          "Warning: Select has a child which is not a Option component"
-        );
-      }
-    });
-  };
-
-  const getCurrentValus = (indexArr: number[]) => {
-    const values: string[] = [];
-    indexArr.forEach((idx) => {
-      values.push(dataSoure[idx]);
-    });
-    return values;
-  };
-
-  // 点击按钮，设置当前的值
-  const handleClick = (idx: number) => {
-    const indexArr: number[] = selectIndexByDataSoure(idx);
-    if (onChange) {
-      onChange(getCurrentValus(indexArr), dataSoure);
-    }
-    
-  };
-
-  // 鼠标聚焦，显示菜单
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    setShow((pre) => {
-      console.log("handleFocus", pre);
+  }= props
+  const input = useRef<HTMLInputElement>(null)
+  const containerRef = useRef<HTMLInputElement>(null)
+  const containerWidth = useRef(0)
+  const [ selectedValues, setSelectedValues ] = useState<string[]>(Array.isArray(defaultValue)? defaultValue :[])
+  const [ menuOpen, setOpen ] = useState(false)
+  const [ value, setValue ] = useState(typeof defaultValue === 'string' ? defaultValue : '')
+  const handleOptionClick = (value: string, isSelected?: boolean) => {
+    // update value
+    if (!multiple) {
+      setOpen(false)
+      setValue(value)
       if (onVisibleChange) {
-        onVisibleChange(true, dataSoure);
+        onVisibleChange(false)
       }
-      inputRef.current?.blur();
-      return true;
-    });
-  };
-
-  // 隐藏菜单
-  const handleBlur = (e: MouseEvent) => {
-    setShow((pre) => {
-      // 想类组件一样setState
-      console.log("handleBlur", pre);
-      if (onVisibleChange) {
-        onVisibleChange(false, dataSoure);
-      }
-      return false;
-    });
-  };
-
-  const selectIndexByDataSoure = (index: number) => {
-    let values: number[] = [];
-    if (mode === "multiple") {
-      if (curActive.includes(index)) {
-        // 还不能乱序, 排序呗
-        curActive.forEach((idx) => {
-          if (idx !== index) {
-            values.push(idx);
-          }
-        });
-      } else {
-        values = [...curActive, index];
-      }
-      values.sort((a, b) => a - b);
     } else {
-      values.push(index);
+      setValue('')
     }
-    setCurActive(values);
-    return values;
-  };
+    let updatedValues = [value]
+    // click again to remove selected when is multiple mode
+    if (multiple) {
+      updatedValues = isSelected ? selectedValues.filter((v) => v !== value) :  [...selectedValues, value]
+      setSelectedValues(updatedValues)
+    } 
+    if(onChange) {
+      onChange(value, updatedValues)
+    }
 
+  }
+  useEffect(() => {
+    // focus input
+    if (input.current) {
+      input.current.focus()
+      if (multiple && selectedValues.length > 0) {
+        input.current.placeholder = ''
+      } else {
+        if (placeholder) input.current.placeholder = placeholder
+      }
+    }
+  }, [selectedValues, multiple, placeholder])
+  useEffect(() => {
+    if (containerRef.current) {
+      containerWidth.current = containerRef.current.getBoundingClientRect().width
+    }
+  })
+  useClickOutside(containerRef, () => { 
+    setOpen(false)
+    if (onVisibleChange && menuOpen) {
+      onVisibleChange(false)
+    }
+  })
   const passedContext: ISelectContext = {
-    index: curActive ? curActive : [],
-    onSelect: handleClick,
-    mode,
-    defaultValue,
-  };
+    onSelect: handleOptionClick,
+    selectedValues: selectedValues,
+    multiple: multiple,
+  }
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (!disabled) {
+      setOpen(!menuOpen)
+      if (onVisibleChange) {
+        onVisibleChange(!menuOpen)
+      }
+    }
 
+  }
+  const generateOptions = () => {
+    return React.Children.map(children, (child, i) => {
+      const childElement = child as FunctionComponentElement<SelectOptionProps>
+      if (childElement.type.displayName === 'Option') {
+        return React.cloneElement(childElement, {
+          index: `select-${i}`
+        })
+      } else {
+        console.error("Warning: Select has a child which is not a Option component")
+      }
+    })
+  }
+  const containerClass = classNames('viking-select', {
+    'menu-is-open': menuOpen,
+    'is-disabled': disabled,
+    'is-multiple': multiple,
+  })
   return (
-    <>
-      <div
-        ref={compRef}
-        style={{ border: "1px solid red", position: "relative" }}
-      >
-        <div>
-          <input
-            type="text"
-            value={
-              mode !== "tags"
-                ? getCurrentValus(curActive)
-                : dataSoure[curActive[0]]
-            }
-            onFocus={handleFocus}
-            ref={inputRef}
-            disabled={disabled}
-          />
-        </div>
-        {show && (
-          <ul
-            style={{
-              listStyle: "none",
-              position: "absolute",
-              zIndex: 999,
-              border: "1px solid #999",
-              display: "flex",
-              flexDirection:"column"
-            }}
-          >
-            <SelectContext.Provider value={passedContext}>
-              {renderChildren()}
-            </SelectContext.Provider>
-          </ul>
-        )}
+    <div className={containerClass} ref={containerRef}>
+      <div className="viking-select-input" onClick={handleClick}>
+        <Input
+          ref={input}
+          placeholder={placeholder} 
+          value={value} 
+          readOnly 
+          icon="angle-down"
+          disabled={disabled}
+          name={name}
+        />
       </div>
-    </>
-  );
-};
+      <SelectContext.Provider value={passedContext}>
+        <Transition
+            in={menuOpen}
+            animation="zoom-in-top"
+            timeout={300}
+          >
+          <ul className="viking-select-dropdown">
+            {generateOptions()}
+          </ul>
+        </Transition>
+      </SelectContext.Provider>
+      {multiple &&
+        <div className="viking-selected-tags" style={{maxWidth: containerWidth.current - 32}}> 
+          {
+            selectedValues.map((value, index) => {
+              return (
+                <span className="viking-tag" key={`tag-${index}`}>
+                  {value}
+                  <Icon icon="times" onClick={() => {handleOptionClick(value, true)}} />
+                </span>
+              )
+            })
+          }
+        </div>
+      }
 
-Select.displayName = "Select";
-
+    </div>
+  )
+}
+Select.displayName = 'Select'
 Select.defaultProps = {
-  mode: "tags",
-  size: "default",
-  disabled: false,
-  defaultValue: [],
-};
+  name: 'viking-select',
+  placeholder: '请选择'
+}
 
 export default Select;

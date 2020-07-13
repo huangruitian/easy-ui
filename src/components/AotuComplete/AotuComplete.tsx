@@ -1,161 +1,170 @@
-import React, { FC, ChangeEvent, useState, ReactElement, useEffect, useRef } from 'react'
+import React, { FC, useState, ChangeEvent, KeyboardEvent, ReactElement, useEffect, useRef } from 'react'
 import classNames from 'classnames'
 import Input, { InputProps } from '../Input/Input'
-import Icon from '../Icon/Icon'
+import Icon from '../Icon/index'
+import Transition from '../Transition/index'
 import useDebounce from '../../hooks/useDebounce'
-import useClickOutSide from '../../hooks/useClickOutSide'
-
+import useClickOutside from '../../hooks/useClickOutSide'
 interface DataSourceObject {
   value: string;
 }
 export type DataSourceType<T = {}> = T & DataSourceObject
-
-export interface IAotuCompleteProps extends Omit<InputProps, 'onSelect'> {
-  /** 搜索关键字的回调，这个值一定要给 */
-  fetchSuggestions: (keyWord: string) => DataSourceType[] | Promise<DataSourceType[]>
-  /** 选择后的回调 */
-  onSelect?: (item: DataSourceType) => void
-  /** 自定义渲染模版 */
-  renderOption?: (item: DataSourceType) => ReactElement
+export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
+  /**
+   * 返回输入建议的方法，可以拿到当前的输入，然后返回同步的数组或者是异步的 Promise
+   * type DataSourceType<T = {}> = T & DataSourceObject
+   */
+  fetchSuggestions: (str: string) => DataSourceType[] | Promise<DataSourceType[]>;
+  /** 点击选中建议项时触发的回调*/
+  onSelect?: (item: DataSourceType) => void;
+  /**支持自定义渲染下拉项，返回 ReactElement */
+  renderOption?: (item: DataSourceType) => ReactElement;
 }
 
-const AotuComplete: FC<IAotuCompleteProps> = (props) => {
+/**
+ * 输入框自动完成功能。当输入值需要自动完成时使用，支持同步和异步两种方式
+ * 支持 Input 组件的所有属性 支持键盘事件选择
+ * ### 引用方法
+ * 
+ * ~~~js
+ * import { AutoComplete } from 'vikingship'
+ * ~~~
+ */
+export const AutoComplete: FC<AutoCompleteProps> = (props) => {
   const {
-    value,
-    onSelect,
     fetchSuggestions,
+    onSelect,
+    value,
     renderOption,
     ...restProps
   } = props
-  const [initValue, setInitValue] = useState(value as string)
-  // 加防抖
-  const debounceValue = useDebounce(initValue, 300)
-  const [suggestions, setSuggestions] = useState<DataSourceType[]>([])
-  const [activeIndex, setActiveIndex] = useState(-1)
-  const [loading, setLoading] = useState(false)
-  // 比常见的ref更万能
-  const tiggerSearch = useRef(false)
-  const compRef = useRef<HTMLDivElement>(null)
-  useClickOutSide(compRef, () => { setSuggestions([]) })
+
+  const [ inputValue, setInputValue ] = useState(value as string)
+  const [ suggestions, setSugestions ] = useState<DataSourceType[]>([])
+  const [ loading, setLoading ] = useState(false)
+  const [ showDropdown, setShowDropdown] = useState(false)
+  const [ highlightIndex, setHighlightIndex] = useState(-1)
+  // 避免按下回车造成多次渲染
+  const triggerSearch = useRef(false)
+  const componentRef = useRef<HTMLDivElement>(null)
+  const debouncedValue = useDebounce(inputValue, 300)
+  // 点最外面才收起来
+  useClickOutside(componentRef, () => { setSugestions([])})
 
   useEffect(() => {
-    if (debounceValue && tiggerSearch.current) {
-      const result = fetchSuggestions(debounceValue)
-      if (result instanceof Promise) {
-        // setSuggestions([])
+    if (debouncedValue && triggerSearch.current) {
+      setSugestions([])
+      const results = fetchSuggestions(debouncedValue)
+      if (results instanceof Promise) {
         setLoading(true)
-        result.then((res) => {
+        results.then(data => {
           setLoading(false)
-          // 外面必须用链式调用的then 处理好值
-          setSuggestions(res)
-        }).catch(() => {
-          setLoading(false)
+          setSugestions(data)
+          if (data.length > 0) {
+            setShowDropdown(true)
+          }
         })
       } else {
-        setSuggestions(result)
+        setSugestions(results)
+        setShowDropdown(true)
+        if (results.length > 0) {
+          setShowDropdown(true)
+        } 
       }
     } else {
-      setSuggestions([])
+      setShowDropdown(false)
     }
-  }, [debounceValue, fetchSuggestions])
+    setHighlightIndex(-1)
+  }, [debouncedValue, fetchSuggestions])
 
-  const cnames = classNames('.viking-auto-complete', {
-
-  })
-  
-  const handleChangeActiveIndex = (index: number) => {
-    if (index < 0) {
-      index = 0
-    }
+  const highlight = (index: number) => {
+    if (index < 0) index = 0
     if (index >= suggestions.length) {
       index = suggestions.length - 1
     }
-    setActiveIndex(index)
+    setHighlightIndex(index)
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    switch (e.keyCode) {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    switch(e.keyCode) {
       case 13:
-        if (suggestions.length) {
-          handleSelect(suggestions[activeIndex])
+        if (suggestions[highlightIndex]) {
+          handleSelect(suggestions[highlightIndex])
         }
-        break;
+        break
       case 38:
-        handleChangeActiveIndex(activeIndex - 1)
-        break;
+        highlight(highlightIndex - 1)
+        break
       case 40:
-        handleChangeActiveIndex(activeIndex + 1)
-        break;
+        highlight(highlightIndex + 1)
+        break
       case 27:
-        setSuggestions([])
-        break;
+        setShowDropdown(false)
+        break
       default:
-        break;
+        break
     }
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const keyword = e.target.value.trim()
-    // 设置初始值
-    setInitValue(keyword)
-    tiggerSearch.current = true
+    const value = e.target.value.trim()
+    setInputValue(value)
+    triggerSearch.current = true
   }
 
-  // 选择 item
   const handleSelect = (item: DataSourceType) => {
-    setInitValue(item.value)
-    setSuggestions([])
+    setInputValue(item.value)
+    setShowDropdown(false)
     if (onSelect) {
       onSelect(item)
     }
-    tiggerSearch.current = false
+    triggerSearch.current = false
   }
 
   const renderTemplate = (item: DataSourceType) => {
     return renderOption ? renderOption(item) : item.value
   }
 
-  const renderDropdown = () => {
+  const generateDropdown = () => {
     return (
-      <ul>
-        {suggestions.map((item, index) => {
-          const cnames = classNames('suggestion-item', {
-            'is-active': activeIndex === index
-          })
-          return (<li
-            key={index}
-            className={cnames}
-            onClick={() => handleSelect(item)}
-          >
-            {renderTemplate(item)}
-          </li>)
-        })}
-      </ul>
+      <Transition
+        in={showDropdown || loading}
+        animation="zoom-in-top"
+        timeout={300}
+        onExited={() => {setSugestions([])}}
+      >
+        <ul className="viking-suggestion-list">
+          { loading &&
+            <div className="suggstions-loading-icon">
+              <Icon icon="spinner" spin/>
+            </div>
+          }
+          {suggestions.map((item, index) => {
+            const cnames = classNames('suggestion-item', {
+              'is-active': index === highlightIndex
+            })
+            return (
+              <li key={index} className={cnames} onClick={() => handleSelect(item)}>
+                {renderTemplate(item)}
+              </li>
+            )
+          })}
+        </ul>
+      </Transition>
     )
   }
 
   return (
-    <>
-      <div className={cnames}>
-        <Input
-          value={initValue}
-          onKeyDown={handleKeyDown}
-          onChange={handleChange}
-          {...restProps}
-        />
-      </div>
-      <div>
-        {loading && <span><Icon icon="spinner" spin /></span>}
-        {suggestions.length > 0 && renderDropdown()}
-      </div>
-    </>
+    <div className="viking-auto-complete" ref={componentRef}>
+      <Input
+        value={inputValue}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        {...restProps}
+      />
+      {generateDropdown()}
+    </div>
   )
 }
 
-AotuComplete.displayName = 'AotuComplete'
-
-AotuComplete.defaultProps = {
-
-}
-
-export default AotuComplete
+export default AutoComplete;

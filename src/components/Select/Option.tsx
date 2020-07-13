@@ -1,53 +1,38 @@
 import React, { FC, useContext } from 'react'
 import classNames from 'classnames'
-import Icon from '../Icon/Icon'
+import Icon from '../Icon'
 import { SelectContext } from './Select'
-
-export interface IOptionProps {
-  disabled?: boolean
-  value: string
-  index?: number
+export interface SelectOptionProps {
+  index?: string;
+  /** 默认根据此属性值进行筛选，该值不能相同*/
+  value: string;
+  /** 选项的标签，若不设置则默认与 value 相同*/
+  label?: string;
+  /** 是否禁用该选项*/
+  disabled?: boolean;
 }
 
-{/* 
-  <Select>
-    <Select.Option value="lucy">lucy</Select.Option>
-  </Select> 
-*/}
-
-const Option: FC<IOptionProps> = (props) => {
-  const {
-    disabled,
-    value,
-    index = -1,
-    children,
-  } = props
-  const context = useContext(SelectContext)
-  
-  // option 点击
-  const hanleClick = (e: React.MouseEvent) => {
-    if(context.onSelect && index != undefined){
-      console.log('option clicked')
-       context.onSelect(index)
-     }
-  }
-  // 样式控制不能点击
-  const classes = classNames('option-item', {
+export const Option: FC<SelectOptionProps> = ({value, label, disabled, children, index}) => {
+  const { onSelect, selectedValues, multiple } = useContext(SelectContext)
+  const isSelected = selectedValues.includes(value)
+  const classes = classNames('viking-select-item', {
     'is-disabled': disabled,
-    'is-active': context.index.includes(index)
+    'is-selected': isSelected,
   })
-
+  const handleClick = (e: React.MouseEvent, value: string, isSelected: boolean) => {
+    e.preventDefault()
+    if(onSelect && !disabled) {
+      onSelect(value, isSelected)
+    }
+  }
   return (
-    <li onClick={hanleClick} className={classes} style={{border:'1px solid #ccc', flex:1}}>
-      {children}
+    <li key={index} className={classes} onClick={(e) => {handleClick(e, value, isSelected)}}>
+      {children || (label ? label: value)}
+      {multiple && isSelected && <Icon icon="check"/>}
     </li>
   )
 }
 
 Option.displayName = 'Option'
 
-Option.defaultProps = {
-  disabled: false,
-}
-
-export default Option
+export default Option;

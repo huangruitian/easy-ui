@@ -5,7 +5,9 @@ import { CSSTransitionProps } from 'react-transition-group/CSSTransition'
 type AnimationName = 'zoom-in-top' | 'zoom-in-left' | 'zoom-in-bottom' | 'zoom-in-right'
 
 type TransitionProps = CSSTransitionProps & {
+  /** 动画方向 */
   animation?: AnimationName,
+  /** 为了不和被包裹元素的 transition 冲突 */ 
   wrapper? : boolean,
 }
 
@@ -14,7 +16,7 @@ const Transition: React.FC<TransitionProps> = (props) => {
     children,
     classNames,
     animation,
-    wrapper,      // 为了不和被包裹元素的 transition 冲突
+    wrapper, 
     ...restProps
   } = props
   return (

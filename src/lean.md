@@ -80,6 +80,39 @@ cnpm i -D @testing-library/jest-dom
 2. 以使用者的角度先写伪代码
 3. 不要过渡封装，高可用，可扩展性强
 4. 实现代码的时候，不要一口吃成一个胖子，循序渐进，先实现简单的。
+5. 第四点很重要，很重要；
+
+## XHR and Fetch
+1. XHR
+- 兼容性很好，但是API不友好，设计很粗造，不符合分离原则
+- 后面jquery进行了封装，当时很火。
+- 后起之秀axios，和promise配合；
+```js
+JQuery.ajax({
+  type:'POST',
+  url:'http',
+  data:{},
+  dataType:'json',
+  success:() => {},
+  error:() => {}
+})
+```
+
+2. Fetch
+- 基于promise，只对网络请求报错，对400，500都当做成功的请求
+- 默认不会带cookie，需要添加默认项；
+- 不支持abort，不支持超时控制
+- 没有办法原生监测请求的进度
+
+## 文件上传
+1. 传统的表单提交
+- encType: multipart/form-data
+2. js发送异步请求
+- Content-Type: multipart/form-data
+
+
+
+
 
 
 

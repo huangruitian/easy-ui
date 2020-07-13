@@ -1,11 +1,13 @@
-import { FC } from 'react'
-import Select, { ISelectProps } from './Select'
-import Option, { IOptionProps } from './Option'
+import { FC } from 'react';
 
-type SelectComponent = FC<ISelectProps> & {
-    Option: FC<IOptionProps>
-}
-const TransSelect = Select as SelectComponent
-TransSelect.Option = Option
+import Select, { SelectProps } from './Select';
+import Option, { SelectOptionProps} from './Option';
 
-export default TransSelect
+export type ISelectComponent = FC<SelectProps> & {
+  Option: FC<SelectOptionProps>
+};
+
+const TransSelect = Select as ISelectComponent;
+TransSelect.Option = Option;
+
+export default TransSelect;
