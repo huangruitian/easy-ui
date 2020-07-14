@@ -110,6 +110,15 @@ JQuery.ajax({
 2. js发送异步请求
 - Content-Type: multipart/form-data
 
+## 发布之前对代码质量进行检查
+```js
+   "husky": {
+     "hooks": {
+       "pre-commit": "npm run test:nowatch && npm run lint"
+     }
+   },
+```
+
 
 
 
