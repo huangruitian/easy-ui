@@ -12,15 +12,6 @@ export interface TabsProps {
   type?: 'line' | 'card';
 }
 
-/**
- * 选项卡切换组件。
- * 提供平级的区域将大块内容进行收纳和展现，保持界面整洁。
- * ### 引用方法
- * 
- * ~~~js
- * import { Tabs } from 'vikingship'
- * ~~~
- */
 export const Tabs: FC<TabsProps> = (props) => {
   const {
     defaultIndex,
@@ -40,7 +31,7 @@ export const Tabs: FC<TabsProps> = (props) => {
     }
   }
 
-  const navClass = classNames('viking-tabs-nav', {
+  const navClass = classNames('esay-tabs-nav', {
     'nav-line': type === 'line',
     'nav-card': type === 'card',
   })
@@ -49,7 +40,7 @@ export const Tabs: FC<TabsProps> = (props) => {
     return React.Children.map(children, (child, index) => {
       const childElement = child as FunctionComponentElement<TabItemProps>
       const { label, disabled } = childElement.props
-      const classes = classNames('viking-tabs-nav-item', {
+      const classes = classNames('esay-tabs-nav-item', {
         'is-active': activeIndex === index,
         'disabled': disabled,
       })
@@ -74,11 +65,11 @@ export const Tabs: FC<TabsProps> = (props) => {
   }
   
   return (
-    <div className={`viking-tabs ${className}`}>
+    <div className={`esay-tabs ${className}`}>
       <ul className={navClass}>
         {renderNavLinks()}
       </ul>
-      <div className="viking-tabs-content">
+      <div className="esay-tabs-content">
         {renderContent()}
       </div>
     </div>

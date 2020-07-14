@@ -26,10 +26,10 @@ export const Alert: FC<AlertProps> = (props) => {
     onClose,
     closable
   } = props
-  const classes = classNames('viking-alert', {
-    [`viking-alert-${type}`]: type,
+  const classes = classNames('esay-alert', {
+    [`esay-alert-${type}`]: type,
   })
-  const titleClass = classNames('viking-alert-title', {
+  const titleClass = classNames('esay-alert-title', {
     'bold-title': description
   })
 
@@ -48,8 +48,8 @@ export const Alert: FC<AlertProps> = (props) => {
     >
       <div className={classes}>
         <span className={titleClass}>{title}</span>
-        {description && <p className="viking-alert-desc">{description}</p>}
-        {closable && <span className="viking-alert-close" onClick={handleClose}><Icon icon="times"/></span>}
+        {description && <p className="esay-alert-desc">{description}</p>}
+        {closable && <span className="esay-alert-close" onClick={handleClose}><Icon icon="times"/></span>}
       </div>
     </Transition>
   )

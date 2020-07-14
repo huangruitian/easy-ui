@@ -21,15 +21,6 @@ export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
   renderOption?: (item: DataSourceType) => ReactElement;
 }
 
-/**
- * 输入框自动完成功能。当输入值需要自动完成时使用，支持同步和异步两种方式
- * 支持 Input 组件的所有属性 支持键盘事件选择
- * ### 引用方法
- * 
- * ~~~js
- * import { AutoComplete } from 'vikingship'
- * ~~~
- */
 export const AutoComplete: FC<AutoCompleteProps> = (props) => {
   const {
     fetchSuggestions,
@@ -133,7 +124,7 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
         timeout={300}
         onExited={() => {setSugestions([])}}
       >
-        <ul className="viking-suggestion-list">
+        <ul className="esay-suggestion-list">
           { loading &&
             <div className="suggstions-loading-icon">
               <Icon icon="spinner" spin/>
@@ -155,7 +146,7 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
   }
 
   return (
-    <div className="viking-auto-complete" ref={componentRef}>
+    <div className="esay-auto-complete" ref={componentRef}>
       <Input
         value={inputValue}
         onChange={handleChange}

@@ -26,7 +26,7 @@ const multipleSelect = () => (
     <Select.Option value="nihao" />
     <Select.Option value="nihao2" />
     <Select.Option value="nihao3" />
-    <Select.Option value="viking" />
+    <Select.Option value="esay" />
     <Select.Option value="viking2" />
   </Select>
 )
@@ -44,5 +44,5 @@ const disabledSelect = () => (
 
 storiesOf('Select', module)
   .add('Select', defaultSelect)
-  .add('支持多选的 Select', multipleSelect)
-  .add('被禁用的 Select', disabledSelect)
+  .add('支持多选', multipleSelect)
+  .add('被禁用', disabledSelect)

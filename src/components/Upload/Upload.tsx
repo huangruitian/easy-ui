@@ -46,14 +46,6 @@ export interface UploadProps {
   drag?: boolean;
 }
 
-/**
- * 通过点击或者拖拽上传文件
- * ### 引用方法
- * 
- * ~~~js
- * import { Upload } from 'vikingship'
- * ~~~
- */
 export const Upload: FC<UploadProps> = (props) => {
   const {
     action,
@@ -187,9 +179,9 @@ export const Upload: FC<UploadProps> = (props) => {
 
   return (
     <div 
-      className="viking-upload-component"
+      className="esay-upload-component"
     >
-      <div className="viking-upload-input"
+      <div className="esay-upload-input"
         style={{display: 'inline-block'}}
         onClick={handleClick}>
           {drag ? 
@@ -199,7 +191,7 @@ export const Upload: FC<UploadProps> = (props) => {
             children
           }
         <input
-          className="viking-file-input"
+          className="esay-file-input"
           style={{display: 'none'}}
           ref={fileInput}
           onChange={handleFileChange}

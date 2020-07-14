@@ -110,7 +110,17 @@ JQuery.ajax({
 2. js发送异步请求
 - Content-Type: multipart/form-data
 
+
+## js 模块化
+1. script 脚本引入
+2. 立即执行函数，jq时代
+3. define 形式的amd，node的commonjs
+4. es 标准 es6 module，目前只有最新的浏览器支持，支持得也很有限制
+- webpack这样的打包工具就出现了。把资源打包成 bundler
+
+
 ## 发布之前对代码质量进行检查
+- 单元测试减少BUG，规范代码增加团队合作，增加代码的高度可维护性。
 ```js
    "husky": {
      "hooks": {

@@ -29,5 +29,5 @@ const customTabs = () => (
 )
 storiesOf('Tabs', module)
   .add('Tabs', defaultTabs)
-  .add('选项卡样式的Tabs', cardTabs)
+  .add('选项卡样式的', cardTabs)
   .add('自定义选项卡样式', customTabs)

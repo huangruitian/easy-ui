@@ -25,7 +25,7 @@ export interface ItemProps {
 }
 
 const FormItem: FC<ItemProps> = forwardRef((props, ref: any) => {
-  const { name, label, children, rules, errorObj } = props;
+  const { name, label, errorObj } = props;
   // 拿到不一样的 children 创建不一样的组件；总体思路是 ref 
   // 产生组件的函数。。。。
   return (

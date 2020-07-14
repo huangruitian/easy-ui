@@ -1,8 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
 
-import Table, { ColumnProps } from './Table'
+import Table from './Table'
 
 let dataSource:any = [];
 
@@ -38,4 +37,4 @@ const defaultTable = () => (
 )
 
 storiesOf('Table', module)
-  .add('Table', defaultTable)
+  .add('Table 样式待完事', defaultTable)

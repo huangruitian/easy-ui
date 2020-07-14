@@ -63,5 +63,5 @@ export const openedMenu = () => (
 
 storiesOf('Menu', module)
 .add('Menu', defaultMenu )
-.add('纵向的 Menu', clickMenu)
-.add('默认展开的纵向 Menu', openedMenu)
+.add('纵向', clickMenu)
+.add('默认展开的纵向', openedMenu)

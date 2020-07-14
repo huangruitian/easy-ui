@@ -1,6 +1,6 @@
-.viking-select {
+.esay-select {
     position: relative;
-    .viking-input-wrapper {
+    .esay-input-wrapper {
       cursor: pointer;
       &:hover {
         input {
@@ -31,13 +31,13 @@
     }
   }
   
-  .viking-select.menu-is-open {
+  .esay-select.menu-is-open {
     .icon-wrapper {
       transform: rotate(180deg) !important;
     }  
   }
   
-  .viking-select-dropdown {
+  .esay-select-dropdown {
     list-style:none;
     padding-left: 0;
     white-space: nowrap;
@@ -49,7 +49,7 @@
     border: $menu-border-width solid $menu-border-color;
     box-shadow: $submenu-box-shadow;
     width: 100%;
-    .viking-select-item {
+    .esay-select-item {
       padding: $menu-item-padding-y $menu-item-padding-x;
       cursor: pointer;
       transition: $menu-transition;
@@ -72,7 +72,7 @@
     }
   }
   
-  .viking-selected-tags {
+  .esay-selected-tags {
     position: absolute;
     z-index: 100;
     top: 0;
@@ -83,7 +83,7 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    .viking-tag {
+    .esay-tag {
       height: 80%;
       padding: 2px 5px;
       box-sizing: border-box;
@@ -93,7 +93,7 @@
       color: $primary;
       background-color: rgba($primary, .1);
     }
-    .viking-icon {
+    .esay-icon {
       margin-left: 3px;
       cursor: pointer;
       &:hover {

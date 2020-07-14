@@ -36,7 +36,7 @@ export const SelectContext = createContext<ISelectContext>({ selectedValues: []}
  * ### 引用方法
  * 
  * ~~~js
- * import { Select } from 'vikingship'
+ * import { Select } from 'esay'
  * // 然后可以使用 <Select> 和 <Select.Option>
  * ~~~
  */
@@ -134,7 +134,7 @@ export const Select:FC<SelectProps> = (props) => {
     })
   }
 
-  const containerClass = classNames('viking-select', {
+  const containerClass = classNames('esay-select', {
     'menu-is-open': menuOpen,
     'is-disabled': disabled,
     'is-multiple': multiple,
@@ -142,7 +142,7 @@ export const Select:FC<SelectProps> = (props) => {
 
   return (
     <div className={containerClass} ref={containerRef}>
-      <div className="viking-select-input" onClick={handleClick}>
+      <div className="esay-select-input" onClick={handleClick}>
         <Input
           ref={input}
           placeholder={placeholder} 
@@ -159,17 +159,17 @@ export const Select:FC<SelectProps> = (props) => {
             animation="zoom-in-top"
             timeout={300}
           >
-          <ul className="viking-select-dropdown">
+          <ul className="esay-select-dropdown">
             {generateOptions()}
           </ul>
         </Transition>
       </SelectContext.Provider>
       {multiple &&
-        <div className="viking-selected-tags" style={{maxWidth: containerWidth.current - 32}}> 
+        <div className="esay-selected-tags" style={{maxWidth: containerWidth.current - 32}}> 
           {
             selectedValues.map((value, index) => {
               return (
-                <span className="viking-tag" key={`tag-${index}`}>
+                <span className="esay-tag" key={`tag-${index}`}>
                   {value}
                   <Icon icon="times" onClick={() => {handleOptionClick(value, true)}} />
                 </span>
@@ -185,7 +185,7 @@ export const Select:FC<SelectProps> = (props) => {
 
 Select.displayName = 'Select'
 Select.defaultProps = {
-  name: 'viking-select',
+  name: 'esay-select',
   placeholder: '请选择'
 }
 

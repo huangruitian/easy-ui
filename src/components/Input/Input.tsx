@@ -37,7 +37,7 @@ const Input: FC<InputProps> = forwardRef((props, ref: any) => {
         ...restProps
     } = props
 
-    const cnames = classNames('viking-input-wrapper', {
+    const cnames = classNames('esay-input-wrapper', {
         [`input-size-${size}`]: size,
         'is-disabled': disabled,
         'input-group': prefix || suffix,
@@ -61,18 +61,18 @@ const Input: FC<InputProps> = forwardRef((props, ref: any) => {
 
     return (
         <div className={cnames}>
-            {prefix && <div className="viking-input-group-prepend">{prefix}</div>}
+            {prefix && <div className="esay-input-group-prepend">{prefix}</div>}
             {icon && <div className="icon-wrapper">
                 <Icon icon={icon} title={`title-${icon}`} />
             </div>}
             <input
-                className="viking-input-inner"
+                className="esay-input-inner"
                 disabled={disabled}
                 style={style}
                 ref={ref}
                 {...restProps}
             />
-            {suffix && <div className="viking-input-group-append">{suffix}</div>}
+            {suffix && <div className="esay-input-group-append">{suffix}</div>}
         </div>
     )
 })

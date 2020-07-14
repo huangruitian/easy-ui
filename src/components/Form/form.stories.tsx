@@ -37,5 +37,5 @@ const defaultForm = () => {
   );
 };
 
-storiesOf("Form", module).add("Form", defaultForm, {info: {text: '基于react-hook-form二次开发：https://www.react-hook-form.com/api'}})
+storiesOf("Form", module).add("待完事的 Form", defaultForm, {info: {text: '基于react-hook-form二次开发：https://www.react-hook-form.com/api'}})
 

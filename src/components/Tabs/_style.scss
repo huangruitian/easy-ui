@@ -1,4 +1,4 @@
-.viking-tabs-nav {
+.esay-tabs-nav {
     display: flex;
     flex-wrap: wrap;
     padding-left: 0;
@@ -6,7 +6,7 @@
     list-style: none;
     border-bottom: $nav-tabs-border-width solid $nav-tabs-border-color;
   }
-  .viking-tabs-nav-item {
+  .esay-tabs-nav-item {
     display: block;
     padding: $nav-link-padding-y $nav-link-padding-x;
     cursor: pointer;
@@ -27,7 +27,7 @@
     }
   }
   .nav-line {
-    .viking-tabs-nav-item {
+    .esay-tabs-nav-item {
       &.is-active {
         border-bottom: $nav-tabs-border-width * 2 solid  $nav-tabs-link-active-color;
       }   
@@ -35,7 +35,7 @@
   }
   
   .nav-card {
-    .viking-tabs-nav-item {
+    .esay-tabs-nav-item {
       border: $nav-tabs-border-width solid transparent;
       margin-bottom: -$nav-tabs-border-width;
       &.is-active {
@@ -46,6 +46,6 @@
     }  
   }
   
-  .viking-tabs-content {
+  .esay-tabs-content {
     margin-top: $nav-tabs-content-margin;
   }

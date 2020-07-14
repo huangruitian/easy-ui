@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
-import Button from "./components/Button/Button";
-import Input from "./components/Input/Input";
-import Form from "./components/Form";
+
 
 // 用 library 加入图标，需要什么种类的就加什么
 library.add(fas);

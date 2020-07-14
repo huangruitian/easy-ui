@@ -80,25 +80,25 @@ describe('test Select component', () => {
     // fire events
     expect(multipleProps.onChange).toHaveBeenCalledWith('id1', ['id1'])
     // add tags
-    expect(container.querySelectorAll('.viking-tag').length).toEqual(1)
+    expect(container.querySelectorAll('.esay-tag').length).toEqual(1)
     //remove placeholder
     expect(inputEle.placeholder).toEqual('')
     // click 2nd item
     fireEvent.click(secondItem)
     expect(multipleProps.onChange).toHaveBeenLastCalledWith('id2', ['id1', 'id2'])
-    expect(container.querySelectorAll('.viking-tag').length).toEqual(2)
+    expect(container.querySelectorAll('.esay-tag').length).toEqual(2)
     //reclick 2nd item
     fireEvent.click(secondItem)
     // remove acitve class
     expect(secondItem).not.toHaveClass('is-selected')
     // remove tags
-    expect(container.querySelectorAll('.viking-tag').length).toEqual(1)
+    expect(container.querySelectorAll('.esay-tag').length).toEqual(1)
     expect(multipleProps.onChange).toHaveBeenLastCalledWith('id2', ['id1'])
     // click tag close
     fireEvent.click(getByText('times'))
     expect(multipleProps.onChange).toHaveBeenLastCalledWith('id1', [])
     //remove all tags
-    expect(container.querySelectorAll('.viking-tag').length).toEqual(0)
+    expect(container.querySelectorAll('.esay-tag').length).toEqual(0)
     //refill placeholder text
     expect(inputEle.placeholder).toEqual('test')
   })

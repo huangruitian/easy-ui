@@ -31,5 +31,5 @@ const customIcons = () => (
 
 storiesOf('Icon', module)
   .add('Icon', defaultIcons)
-  .add('不同主题的 Icon', themeIcons)
-  .add('更多行为的 Icon', customIcons, {info: {text: '更多例子请参见：https://github.com/FortAwesome/react-fontawesome#basic'}})
+  .add('不同主题', themeIcons)
+  .add('更多行为', customIcons, {info: {text: '更多例子请参见：https://github.com/FortAwesome/react-fontawesome#basic'}})

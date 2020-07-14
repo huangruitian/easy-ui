@@ -175,4 +175,4 @@ return (
 storiesOf('AutoComplete', module)
   .add('AutoComplete', simpleComplete, {info: {source: false, text: textComplete}})
   .add('自定义下拉选项', customComplete,  {info: {source: false, text: textCustom}})
-  .add('异步请求Github用户名', ajaxComplete, {info: {source: false, text: textAjax}})
+  .add('异步请求', ajaxComplete, {info: {source: false, text: textAjax}})

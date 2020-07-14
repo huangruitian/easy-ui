@@ -29,3 +29,32 @@ export const deepGet = (
 // result=deepGet(obj, 'a.b.c', 'default');
 // console.log(result);
 // => 'default'
+
+export const addBigInter = (str = "159", str2 = "753") => {
+  let sum = '';
+  let sept = 0;
+  let i = str.length - 1;
+  let j = str2.length - 1;
+  while (j >= 0 || i >= 0) {
+    let temp = 0
+    let a = 0
+    let b = 0
+    if (i >= 0) {
+      a = Number(str[i])
+      i--;
+    }
+    if (j >= 0) {
+      b = Number(str2[j])
+      j--;
+    }
+    temp = a + b + sept;
+    if (temp >= 10) {
+      temp = temp % 10;
+      sept = 1
+    } else {
+      sept = 0
+    }
+    sum = temp.toString() + sum
+  }
+  return Number(sum);
+};

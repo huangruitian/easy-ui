@@ -51,7 +51,7 @@ const pandInput = () => (
 
 storiesOf('Input', module)
   .add('Input', defaultInput)
-  .add('被禁用的 Input', disabledInput)
-  .add('带图标的 Input', iconInput)
-  .add('大小不同的 Input', sizeInput)
-  .add('带前后缀的 Input', pandInput)
+  .add('被禁用的', disabledInput)
+  .add('带图标的', iconInput)
+  .add('大小不同的', sizeInput)
+  .add('带前后缀的', pandInput)

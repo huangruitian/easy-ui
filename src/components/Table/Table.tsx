@@ -28,11 +28,13 @@ export interface TableProps {
 
 const Table: FC<TableProps> = (props) => {
   const { dataSource = [], columns, loading, pagination, onChange } = props;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { current, pageSize, total } = pagination as paginationType;
   
   const [renderData, setRenderData] = useState<any[]>([]);
   const [pageNo, setPageNo] = useState<number>(current || 1);
   const [_pageSize, setPageSize] = useState<number>(pageSize || 10);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pageLoading, setPageLoading] = useState(loading);
   console.log('renderData', renderData)
 

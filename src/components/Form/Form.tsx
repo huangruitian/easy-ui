@@ -9,7 +9,7 @@ export interface FormProps {
 
 const Form: FC<FormProps> = (props) => {
   const { children, onSubmit, form } = props;
-  const { register, handleSubmit, errors, ...restProps } = form;
+  const { register, handleSubmit, errors } = form;
 
   const createFormItem = (element: any, props?: object) => {
     return React.cloneElement(element, {
