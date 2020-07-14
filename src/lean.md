@@ -121,6 +121,7 @@ JQuery.ajax({
 
 ## 发布之前对代码质量进行检查
 - 单元测试减少BUG，规范代码增加团队合作，增加代码的高度可维护性。
+- "pre-commit": "npm run test:nowatch && npm run lint" commit 代码前会执行test脚本和lint脚本，保证代码的质量；
 ```js
    "husky": {
      "hooks": {
@@ -128,6 +129,15 @@ JQuery.ajax({
      }
    },
 ```
+
+## 运行 build-storybook 生成静态文档；
+
+## CI 持续集成
+- 频繁的把代码提交到master，防止产品分离到别的分支，以后持续集成难度大。
+- 集成要经过一些严格的检查或者测试，也就是敏捷开发；
+
+## CD持续交付，持续部署
+- 代码经过测试，评审之后上生产；
 
 
 
