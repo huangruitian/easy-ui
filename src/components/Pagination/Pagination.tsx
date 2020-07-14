@@ -4,8 +4,11 @@ import Button from "../Button";
 import Select from "../Select";
 
 export interface paginationType {
+  /** 当前页 */
   current: number;
+  /** 页容量 */
   pageSize: number;
+  /** 总数 */
   total: number;
   //选择页码变化后的回调
   onChange?: (pageNo: number, pageSize: number) => void;
@@ -14,15 +17,15 @@ export interface paginationType {
 const Pagination: FC<paginationType> = (props) => {
   const { current, pageSize, total, onChange } = props;
   const [pageNo, setPageNo] = useState<number>(current || 1);
-  const [page_size, setPage_size] = useState<number>(pageSize || 10);
-  const maxPageNo = Math.ceil(total / page_size);
+  const [_pageSize, setPageSize] = useState<number>(pageSize || 10);
+  const maxPageNo = Math.ceil(total / _pageSize);
 
   const handleChangePageNo = (pageNo: number) => {
     if (pageNo > maxPageNo || pageNo < 1) {
       return;
     }
     if (onChange) {
-      onChange(pageNo, page_size);
+      onChange(pageNo, _pageSize);
     }
     setPageNo(pageNo);
   };
@@ -49,9 +52,10 @@ const Pagination: FC<paginationType> = (props) => {
     handleChangePageNo(pageNo);
   };
 
-  const handleChangeSelect = (value: (string | number)[]) => {
+  const handleChangeSelect = (selectedValue: string, value: string []) => {
     const pageSize = +value[0] || 10;
-    setPage_size(pageSize);
+    setPageSize(pageSize);
+    setPageNo(1)
     if (onChange) {
       // 选了页容量要第一页开始算
       onChange(1, pageSize);
@@ -80,7 +84,7 @@ const Pagination: FC<paginationType> = (props) => {
         paddingRight: 20,
       }}
     >
-      <div style={{ marginRight: 20, color: "red" }}>当前页：{current}</div>
+      <div style={{ marginRight: 20, color: "red" }}>当前页：{pageNo}</div>
       <div style={{ display: "flex" }}>
         <Button onClick={handleFirstPageNo}> 首页 </Button>
         <Button btnType="link" onClick={handlePrePageNo}>
@@ -101,7 +105,7 @@ const Pagination: FC<paginationType> = (props) => {
         </Button>
         <Button onClick={handleLastPageNo}> 最后一页 </Button>
         <span style={{display:"line-block", paddingLeft:20}}>选页：</span>
-        <Select onChange={handleChangeSelect} defaultValue={[0]}>
+        <Select onChange={handleChangeSelect} defaultValue={['0']}>
           <Select.Option value="10">10页</Select.Option>
           <Select.Option value="20">20页</Select.Option>
           <Select.Option value="30">30页</Select.Option>

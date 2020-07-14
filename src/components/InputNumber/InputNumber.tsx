@@ -141,12 +141,12 @@ const InputNumber: FC<Partial<InputProps>> = (props) => {
     )
 }
 
-InputNumber.displayName = 'InputNumber'
+InputNumber.displayName = 'InputNumber';
 
 InputNumber.defaultProps = {
     size: "middle",
     disabled: false,
     type: 'text'
-}
+};
 
-export default InputNumber
+export default InputNumber;

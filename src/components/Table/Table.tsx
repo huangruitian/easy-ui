@@ -7,17 +7,22 @@ import { FixedSizeList as List } from "react-window";
 import { deepGet } from "../../utils";
 import Pagination, { paginationType } from "../Pagination/Pagination";
 
-interface ColumnProps {
+export interface ColumnProps {
   title?: React.ReactNode;
   dataIndex: string | string[];
   key?: string;
 }
 
-interface TableProps {
+export interface TableProps {
+  /** 源数据 */
   dataSource?: any[];
+  /** 列数据 */
   columns: ColumnProps[];
+  /** 是否加载 */
   loading?: boolean;
+  /** 分页器，具体看Pagination */
   pagination?: boolean | paginationType;
+  /** 选择页码的回调 */
   onChange?: (pageNo: number, pageSize: number) => void;
 }
 
@@ -27,17 +32,17 @@ const Table: FC<TableProps> = (props) => {
   
   const [renderData, setRenderData] = useState<any[]>([]);
   const [pageNo, setPageNo] = useState<number>(current || 1);
-  const [page_size, setPage_size] = useState<number>(pageSize || 10);
+  const [_pageSize, setPageSize] = useState<number>(pageSize || 10);
   const [pageLoading, setPageLoading] = useState(loading);
   console.log('renderData', renderData)
 
   //首次渲染的数据
   useEffect(() => {
-    console.log('page_size, pageNo', page_size, pageNo)
+    console.log('page_size, pageNo', _pageSize, pageNo)
     if (pagination && dataSource.length) {
       console.time("slice：");
-      const index = (pageNo - 1) * page_size;
-      const limit = page_size * pageNo;
+      const index = (pageNo - 1) * _pageSize;
+      const limit = _pageSize * pageNo;
       const arr = (dataSource || []).slice(index, limit);
       // 性能优化，一次开完内存，避免多次push
       //   const arr = new Array(limit)
@@ -48,7 +53,7 @@ const Table: FC<TableProps> = (props) => {
       // 怎么在一次更新之后再回调一次更新
       setRenderData(arr);
     }
-  }, [pageNo, page_size, pagination, dataSource]);
+  }, [pageNo, _pageSize, pagination, dataSource]);
 
   const renderTitle = () => {
     return columns.map((item, index) => {
@@ -105,7 +110,7 @@ const Table: FC<TableProps> = (props) => {
   const renderDataSource = () => (
     <List
       height={300}
-      itemCount={page_size}
+      itemCount={_pageSize}
       itemSize={30}
       width={1000}
       itemData={renderData}
@@ -120,7 +125,7 @@ const Table: FC<TableProps> = (props) => {
      }
      console.log('handleChangePageNo', pageNo, pageSize)
      setPageNo(pageNo)
-     setPage_size(pageSize)
+     setPageSize(pageSize)
   }
 
   return (
@@ -133,7 +138,7 @@ const Table: FC<TableProps> = (props) => {
       {pagination && (
         <Pagination
           current={pageNo}
-          pageSize={page_size}
+          pageSize={_pageSize}
           total={dataSource.length}
           onChange={handleChangePageNo}
         />

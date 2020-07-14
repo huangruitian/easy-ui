@@ -90,22 +90,26 @@ export const Select:FC<SelectProps> = (props) => {
       }
     }
   }, [selectedValues, multiple, placeholder])
+
   useEffect(() => {
     if (containerRef.current) {
       containerWidth.current = containerRef.current.getBoundingClientRect().width
     }
   })
+
   useClickOutside(containerRef, () => { 
     setOpen(false)
     if (onVisibleChange && menuOpen) {
       onVisibleChange(false)
     }
   })
+
   const passedContext: ISelectContext = {
     onSelect: handleOptionClick,
     selectedValues: selectedValues,
     multiple: multiple,
   }
+
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (!disabled) {
@@ -116,6 +120,7 @@ export const Select:FC<SelectProps> = (props) => {
     }
 
   }
+
   const generateOptions = () => {
     return React.Children.map(children, (child, i) => {
       const childElement = child as FunctionComponentElement<SelectOptionProps>
@@ -128,11 +133,13 @@ export const Select:FC<SelectProps> = (props) => {
       }
     })
   }
+
   const containerClass = classNames('viking-select', {
     'menu-is-open': menuOpen,
     'is-disabled': disabled,
     'is-multiple': multiple,
   })
+
   return (
     <div className={containerClass} ref={containerRef}>
       <div className="viking-select-input" onClick={handleClick}>
@@ -175,6 +182,7 @@ export const Select:FC<SelectProps> = (props) => {
     </div>
   )
 }
+
 Select.displayName = 'Select'
 Select.defaultProps = {
   name: 'viking-select',
