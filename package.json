@@ -49,12 +49,12 @@
     "build-css": "node-sass ./src/styles/index.scss ./dist/index.css",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
-    "prepublishOnly": "npm run test:nowatch && npm run lint && npm run build"
+    "prepublishOnly": "npm run test:nowatch && npm run lint && npm run build",
+    "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run test:nowatch && npm run lint",
-      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
+      "pre-commit": "npm run commit-msg && npm run test:nowatch && npm run lint"
     }
   },
   "eslintConfig": {
