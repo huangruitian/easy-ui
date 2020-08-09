@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/easy-ui/static/css/main.3513b310.chunk.css",
+    "main.js": "/easy-ui/main.fd74535cc5c097492e32.bundle.js",
+    "main.css.map": "/easy-ui/static/css/main.3513b310.chunk.css.map",
+    "main.js.map": "/easy-ui/main.fd74535cc5c097492e32.bundle.js.map",
+    "runtime~main.js": "/easy-ui/runtime~main.fd74535cc5c097492e32.bundle.js",
+    "runtime~main.js.map": "/easy-ui/runtime~main.fd74535cc5c097492e32.bundle.js.map",
+    "vendors~main.css": "/easy-ui/static/css/vendors~main.f8f248a5.chunk.css",
+    "vendors~main.js": "/easy-ui/vendors~main.fd74535cc5c097492e32.bundle.js",
+    "vendors~main.css.map": "/easy-ui/static/css/vendors~main.f8f248a5.chunk.css.map",
+    "vendors~main.js.map": "/easy-ui/vendors~main.fd74535cc5c097492e32.bundle.js.map",
+    "iframe.html": "/easy-ui/iframe.html",
+    "precache-manifest.18b84dee9da92200d80ee1974ccc2583.js": "/easy-ui/precache-manifest.18b84dee9da92200d80ee1974ccc2583.js",
+    "service-worker.js": "/easy-ui/service-worker.js",
+    "vendors~main.fd74535cc5c097492e32.bundle.js.LICENSE.txt": "/easy-ui/vendors~main.fd74535cc5c097492e32.bundle.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "runtime~main.fd74535cc5c097492e32.bundle.js",
+    "static/css/vendors~main.f8f248a5.chunk.css",
+    "vendors~main.fd74535cc5c097492e32.bundle.js",
+    "static/css/main.3513b310.chunk.css",
+    "main.fd74535cc5c097492e32.bundle.js"
+  ]
+}
